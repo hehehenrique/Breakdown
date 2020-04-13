@@ -20,7 +20,6 @@ UMainMenu::UMainMenu( const FObjectInitializer& ObjectInitializer )
 		return;
 	}
 	ServerRowClass = ServerRowWBPClass.Class;
-
 }
 
 void UMainMenu::Setup() 
@@ -114,9 +113,7 @@ void UMainMenu::CreateServerList(TArray<FString> ServerNames)
 		serverRow->Setup( this, serverRowIndex );
 		++serverRowIndex;
 		ServerList->AddChild( serverRow );
-
 	}
-
 }
 
 void UMainMenu::SelectIndex( uint32 index )
@@ -136,8 +133,6 @@ void UMainMenu::JoinServer()
 	{
 		UE_LOG( LogTemp, Warning, TEXT( "Selected index %d" ), m_selectedIndex.GetValue() );
 	}
-
-
 }
 
 void UMainMenu::OpenJoinMenu() 

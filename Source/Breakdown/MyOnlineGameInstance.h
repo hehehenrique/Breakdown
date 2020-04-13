@@ -9,6 +9,8 @@
 #include "OnlineSubsystem.h"
 #include "MyOnlineGameInstance.generated.h"
 
+class UMainMenu;
+
 /**
  * 
  */
@@ -18,44 +20,54 @@ class BREAKDOWN_API UMyOnlineGameInstance : public UGameInstance, public IMenuIn
 	GENERATED_BODY()
 public:
 
-	UMyOnlineGameInstance( const FObjectInitializer & ObjectInitializer );
+	UMyOnlineGameInstance(const FObjectInitializer& ObjectInitializer);
 
 	virtual void Init();
 
-	UFUNCTION( BlueprintCallable )
-	void LoadMenu();
+	UFUNCTION(BlueprintCallable)
+		UMainMenu* LoadOnlineMenu();
 
 	UFUNCTION(Exec)
-	virtual void Host() override;
-	
+		virtual void Host() override;
+
 	UFUNCTION(Exec)
-	virtual void Join( const FString& address ) override;
-	virtual void Join( const uint32 index ) override;
-	
+	virtual void Join(const FString& address) override;
+	virtual void Join(const uint32 index) override;
+
 	virtual void RefreshServerList() override;
-
-
-
 
 private:
 
 
 	TSubclassOf< class UUserWidget > MainMenuClass;
-	class UMainMenu* m_pMainMenu;
 	IOnlineSessionPtr m_pSessionInterface;
 	TSharedPtr< class FOnlineSessionSearch > m_pSessionSearch;
-
-	// Callbacks
-	void OnCreateSessionComplete( FName sessionName, bool success );
-	void OnDestroySessionComplete( FName sessionName, bool success );
-	void OnFindSessionsComplete( bool success );
-	void OnJoinSessionComplete( FName sessionName, EOnJoinSessionCompleteResult::Type result );
-
+	
+	
 	void CreateSession();
+
+
 
 protected:
 
 	// Map directory to be loaded
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString desiredMap;
+
+	// Reference to the online menu widget
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UMainMenu* m_pMainMenu;
+
+	// Callbacks
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Online")
+		void OnCreateSessionComplete(FName sessionName, bool success);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Online")
+		void OnDestroySessionComplete(FName sessionName, bool success);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Online")
+		void OnFindSessionsComplete(bool success);
+
+		void OnJoinSessionComplete(FName sessionName, EOnJoinSessionCompleteResult::Type result);
+
 };

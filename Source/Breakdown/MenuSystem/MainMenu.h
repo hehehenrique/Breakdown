@@ -59,16 +59,16 @@ private:
 		UPROPERTY(meta = (BindWidget))
 		class UPanelWidget* ServerList;
 
-		UFUNCTION()
+		UFUNCTION(BlueprintCallable)
 		void HostServer();
 		
-		UFUNCTION()
+		UFUNCTION(BlueprintCallable)
 		void JoinServer();
 
-		UFUNCTION()
+		UFUNCTION(BlueprintCallable)
 		void OpenJoinMenu();
 		
-		UFUNCTION()
+		UFUNCTION(BlueprintCallable)
 		void OpenMainMenu();
 
 

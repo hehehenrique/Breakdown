@@ -15,6 +15,7 @@ const static FName SESSION_NAME = TEXT("Henrique Session Game");
 UMyOnlineGameInstance::UMyOnlineGameInstance(const FObjectInitializer& ObjectInitializer)
 	: UGameInstance( ObjectInitializer )
 	, desiredMap("/Game/Levels/Quarry_V6")
+	, m_pMainMenu(nullptr)
 {
 	ConstructorHelpers::FClassFinder<UMainMenu> MainMenuWBPClass(TEXT("/Game/MenuSystem/WBP_OnlineMainMenu"));
 
@@ -48,24 +49,28 @@ void UMyOnlineGameInstance::Init()
 	}
 }
 
-void UMyOnlineGameInstance::LoadMenu()
+UMainMenu* UMyOnlineGameInstance::LoadOnlineMenu()
 {
+	if (m_pMainMenu == nullptr) {
 	if (!ensure(MainMenuClass != nullptr))
-	{
-		return;
+		{
+			return nullptr;
+		}
+
+		APlayerController* PlayerController = GetFirstLocalPlayerController();
+		if (!ensure(PlayerController != nullptr))
+		{
+			return nullptr;
+		}
+
+		m_pMainMenu = CreateWidget < UMainMenu >(this, MainMenuClass);
+		m_pMainMenu->bIsFocusable = true;
+
+		m_pMainMenu->Setup();
+		m_pMainMenu->SetMenuInterface(this);
 	}
-
-	APlayerController* PlayerController = GetFirstLocalPlayerController();
-	if (!ensure(PlayerController != nullptr))
-	{
-		return;
-	}
-
-	m_pMainMenu = CreateWidget < UMainMenu >(this, MainMenuClass);
-	m_pMainMenu->bIsFocusable = true;
-
-	m_pMainMenu->Setup();
-	m_pMainMenu->SetMenuInterface(this);
+	
+	return m_pMainMenu;
 }
 
 void UMyOnlineGameInstance::Host()
@@ -84,7 +89,7 @@ void UMyOnlineGameInstance::Host()
 	}
 }
 
-void UMyOnlineGameInstance::OnCreateSessionComplete( FName sessionName, bool success )
+void UMyOnlineGameInstance::OnCreateSessionComplete_Implementation( FName sessionName, bool success )
 {
 	if (!success)
 	{
@@ -104,10 +109,9 @@ void UMyOnlineGameInstance::OnCreateSessionComplete( FName sessionName, bool suc
 		return;
 	}
 	World->ServerTravel(desiredMap.Append("?listen"));
-
 }
 
-void UMyOnlineGameInstance::OnDestroySessionComplete( FName sessionName, bool success ) {
+void UMyOnlineGameInstance::OnDestroySessionComplete_Implementation( FName sessionName, bool success ) {
 	if (success) {
 		CreateSession();
 	}
@@ -127,7 +131,7 @@ void UMyOnlineGameInstance::RefreshServerList()
 	}
 }
 
-void UMyOnlineGameInstance::OnFindSessionsComplete( bool success )
+void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success )
 {
 	if (success && m_pSessionSearch.IsValid() && m_pMainMenu != nullptr)
 	{
@@ -211,4 +215,3 @@ void UMyOnlineGameInstance::Join(const uint32 index)
 	{
 	}
 }
-
