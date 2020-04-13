@@ -14,9 +14,9 @@ const static FName SESSION_NAME = TEXT("Henrique Session Game");
 
 UMyOnlineGameInstance::UMyOnlineGameInstance(const FObjectInitializer& ObjectInitializer)
 	: UGameInstance( ObjectInitializer )
-	, desiredMap("UNSET_MAP_NAME")
+	, desiredMap("/Game/Levels/Quarry_V6")
 {
-	ConstructorHelpers::FClassFinder<UMainMenu> MainMenuWBPClass(TEXT("/Game/MenuSystem/WBP_MainMenu"));
+	ConstructorHelpers::FClassFinder<UMainMenu> MainMenuWBPClass(TEXT("/Game/MenuSystem/WBP_OnlineMainMenu"));
 
 	if (!ensure(MainMenuWBPClass.Class != nullptr))
 	{
@@ -65,7 +65,6 @@ void UMyOnlineGameInstance::LoadMenu()
 	m_pMainMenu->bIsFocusable = true;
 
 	m_pMainMenu->Setup();
-
 	m_pMainMenu->SetMenuInterface(this);
 }
 

@@ -44,6 +44,8 @@ void UMainMenu::Setup()
 
 void UMainMenu::OnLevelRemovedFromWorld( ULevel* InLevel, UWorld* InWorld ) 
 {
+	UE_LOG(LogTemp, Warning, TEXT("OnLevelRemovedFromWorld"));
+
 	this->RemoveFromViewport();
 
 	UWorld* pWorld = GetWorld();
