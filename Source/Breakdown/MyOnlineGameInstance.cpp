@@ -176,7 +176,7 @@ void UMyOnlineGameInstance::CreateSession()
 	{
 		FOnlineSessionSettings sessionSettings;
 		sessionSettings.bIsLANMatch = false;
-		sessionSettings.NumPublicConnections = 2;
+		sessionSettings.NumPublicConnections = 10;
 		sessionSettings.bShouldAdvertise = true;
 		sessionSettings.bUsesPresence = true;
 
