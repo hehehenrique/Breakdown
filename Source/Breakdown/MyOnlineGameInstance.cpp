@@ -107,11 +107,12 @@ void UMyOnlineGameInstance::OnCreateSessionComplete_Implementation( FName sessio
 	{
 		return;
 	}
-	World->ServerTravel(desiredMap.Append("?listen"));
+	World->ServerTravel("/Game/Levels/Quarry_V6?listen");
 }
 
 void UMyOnlineGameInstance::OnDestroySessionComplete_Implementation( FName sessionName, bool success ) {
-	if (success) {
+	if (success) 
+	{
 		CreateSession();
 	}
 }
@@ -137,6 +138,7 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 		UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions.!!!"));
 		UE_LOG(LogTemp, Warning, TEXT("%d"), m_pSessionSearch->SearchResults.Num());
 		TArray<FString> serverNames;
+
 		for (const FOnlineSessionSearchResult& searchResult : m_pSessionSearch->SearchResults)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Found Session: %s"), *searchResult.GetSessionIdStr());
@@ -144,14 +146,15 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 		}
 		m_pMainMenu->CreateServerList(serverNames);
 	}
-	else {
+	else 
+	{
 		UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions BUUUUUUUUUT."));
-
 	}
 }
 
 void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSessionCompleteResult::Type result )
 {
+	UE_LOG(LogTemp, Warning, TEXT("OnJoinSessionComplete called"));
 	if ( !m_pSessionInterface.IsValid() ) return;
 	
 	FString address;
@@ -165,11 +168,13 @@ void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSes
 
 	if (!ensure(Engine != nullptr))	return;
 	
-	Engine->AddOnScreenDebugMessage(0, 5, FColor::Green, FString::Printf(TEXT("Joining %s"), *address));
-
 	APlayerController* PlayerController = GetFirstLocalPlayerController();
 
 	if (!ensure(PlayerController != nullptr)) return;
+
+	Engine->AddOnScreenDebugMessage(0, 5, FColor::Green, FString::Printf(TEXT("OnJoinSessionComplete called. Joining address %s"), *address));
+
+	UE_LOG(LogTemp, Warning, TEXT("OnJoinSessionComplete called. ClientTravel will be called in next line. Joining address %s"), *address);
 
 	PlayerController->ClientTravel(FString::Printf(*address), ETravelType::TRAVEL_Absolute);
 }
@@ -179,7 +184,15 @@ void UMyOnlineGameInstance::CreateSession()
 	if (m_pSessionInterface.IsValid())
 	{
 		FOnlineSessionSettings sessionSettings;
-		sessionSettings.bIsLANMatch = false;
+		if (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL")
+		{
+			sessionSettings.bIsLANMatch = true;
+		}
+		else 
+		{
+			sessionSettings.bIsLANMatch = false;
+		}
+
 		sessionSettings.NumPublicConnections = 10;
 		sessionSettings.bShouldAdvertise = true;
 		sessionSettings.bUsesPresence = true;
