@@ -122,7 +122,7 @@ void UMyOnlineGameInstance::RefreshServerList()
 	if (m_pSessionSearch.IsValid())
 	{
 		//m_pSessionSearch->bIsLanQuery = true;
-		m_pSessionSearch->MaxSearchResults = 100; // Need to set this to a high number so we can then filter out lobbies that are not Breakdown. This is because we are using the default steam dev app id 480
+		m_pSessionSearch->MaxSearchResults = 200; // Need to set this to a high number so we can then filter out lobbies that are not Breakdown. This is because we are using the default steam dev app id 480
 		m_pSessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 		UE_LOG(LogTemp, Warning, TEXT("Started Finding Sessions"));
 
@@ -134,7 +134,8 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 {
 	if (success && m_pSessionSearch.IsValid() && m_pMainMenu != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions."));
+		UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions.!!!"));
+		UE_LOG(LogTemp, Warning, TEXT("%d"), m_pSessionSearch->SearchResults.Num());
 		TArray<FString> serverNames;
 		for (const FOnlineSessionSearchResult& searchResult : m_pSessionSearch->SearchResults)
 		{
@@ -142,6 +143,10 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 			serverNames.Add(searchResult.GetSessionIdStr());
 		}
 		m_pMainMenu->CreateServerList(serverNames);
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions BUUUUUUUUUT."));
+
 	}
 }
 
