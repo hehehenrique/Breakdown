@@ -69,7 +69,6 @@ UMainMenu* UMyOnlineGameInstance::LoadOnlineMenu()
 		m_pMainMenu->Setup();
 		m_pMainMenu->SetMenuInterface(this);
 	}
-	
 	return m_pMainMenu;
 }
 

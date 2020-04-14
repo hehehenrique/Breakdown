@@ -96,7 +96,6 @@ void UMainMenu::HostServer()
 	}
 }
 
-
 void UMainMenu::CreateServerList(TArray<FString> ServerNames)
 {
 
@@ -121,7 +120,6 @@ void UMainMenu::SelectIndex( uint32 index )
 	m_selectedIndex = index;
 }
 
-
 void UMainMenu::JoinServer() 
 {
 	if ( m_selectedIndex.IsSet() && m_pMenuInterface != nullptr )
@@ -144,6 +142,7 @@ void UMainMenu::OpenJoinMenu()
 		m_pMenuInterface->RefreshServerList();
 	}
 }
+
 void UMainMenu::OpenMainMenu() 
 {
 	if ( !ensure( MenuSwitcher != nullptr ) ) return;
