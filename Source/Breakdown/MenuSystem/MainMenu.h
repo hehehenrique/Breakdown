@@ -68,7 +68,7 @@ private:
 		class UWidget* JoinMenu;
 		
 		UPROPERTY(meta = (BindWidget))
-		class UWidget* MainMenu;		
+		class UWidget* OnlineMenu;		
 
 		UPROPERTY(meta = (BindWidget))
 		class UPanelWidget* ServerList;
@@ -83,7 +83,7 @@ private:
 		void OpenJoinMenu();
 		
 		UFUNCTION(BlueprintCallable)
-		void OpenMainMenu();
+		void OpenOnlineMenu();
 
 
 		TOptional<uint32> m_selectedIndex;

@@ -78,7 +78,7 @@ bool UMainMenu::Initialize()
 		HostButton->OnClicked.AddDynamic( this, &UMainMenu::HostServer );
 		JoinButton->OnClicked.AddDynamic( this, &UMainMenu::OpenJoinMenu );
 		ConnectToIPButton->OnClicked.AddDynamic( this, &UMainMenu::JoinServer );
-		BackToMainMenuButton->OnClicked.AddDynamic( this, &UMainMenu::OpenMainMenu );
+		BackToMainMenuButton->OnClicked.AddDynamic( this, &UMainMenu::OpenOnlineMenu );
 		return true;
 	}
 	else return false;
@@ -143,9 +143,9 @@ void UMainMenu::OpenJoinMenu()
 	}
 }
 
-void UMainMenu::OpenMainMenu() 
+void UMainMenu::OpenOnlineMenu() 
 {
 	if ( !ensure( MenuSwitcher != nullptr ) ) return;
-	if ( !ensure( MainMenu != nullptr ) ) return;
-	MenuSwitcher->SetActiveWidget( MainMenu );
+	if ( !ensure( OnlineMenu != nullptr ) ) return;
+	MenuSwitcher->SetActiveWidget(OnlineMenu);
 }

@@ -141,25 +141,34 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions.!!!"));
 		UE_LOG(LogTemp, Warning, TEXT("%d"), m_pSessionSearch->SearchResults.Num());
+		
+		
+		// Array of FServerData that we will use to create our server list
 		TArray<FServerData> serverDatas;
 
+		// For loop to configure each serverData and populate the array
 		for (const FOnlineSessionSearchResult& searchResult : m_pSessionSearch->SearchResults)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Found Session: %s"), *searchResult.GetSessionIdStr());
+
 			FServerData serverData;
+
+			// Set struct variables
 			serverData.name = searchResult.GetSessionIdStr();
 			serverData.maxPlayers = searchResult.Session.SessionSettings.NumPublicConnections;
 			serverData.currentPlayers = serverData.maxPlayers - searchResult.Session.NumOpenPublicConnections;
 			serverData.hostUsername = searchResult.Session.OwningUserName;
+
 			TSharedPtr < const FUniqueNetId > hostUserID = searchResult.Session.OwningUserId;
 		
 			//CSteamID hostSteamID ( dynamic_cast<uint64>( *hostUserID->ToString() ) );
 			UE_LOG(LogTemp, Warning, TEXT("Host ID: %s"), *hostUserID->ToString());
 			if(IOnlineSubsystem::Get()->GetSubsystemName() != "NULL")
-			int32 steamID = dynamic_cast<int32> (hostUserID->ToString());
+			int32 steamID = (FCString::Atoi(*hostUserID->ToString()));
 
+			// Get the GameMode key and set the relevant struct var
 			const FOnlineSessionSetting* pGameModeKey = ( searchResult.Session.SessionSettings.Settings.Find(GAMEMODE_SESSION_KEY));
-
+			// If found key
 			if(pGameModeKey)
 			{
 				int32 serverGameMode;
