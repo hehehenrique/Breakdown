@@ -96,20 +96,19 @@ void UMainMenu::HostServer()
 	}
 }
 
-void UMainMenu::CreateServerList(TArray<FString> ServerNames)
+void UMainMenu::CreateServerList(TArray<FServerData> serverDatas )
 {
 
 	ServerList->ClearChildren();
 	uint32 serverRowIndex = 0;
-	for ( const FString& serverName : ServerNames ) 
+	for ( const FServerData& serverData : serverDatas )
 	{
 		UServerRow* serverRow = CreateWidget < UServerRow >( this, ServerRowClass );
 		if ( !ensure( serverRow != nullptr ) ) 
 		{
 			return;
 		}
-		serverRow->ServerName->SetText( FText::FromString( serverName ) );
-		serverRow->Setup( this, serverRowIndex );
+		serverRow->Setup( serverData, this, serverRowIndex );
 		++serverRowIndex;
 		ServerList->AddChild( serverRow );
 	}
@@ -138,7 +137,8 @@ void UMainMenu::OpenJoinMenu()
 	if ( !ensure( MenuSwitcher != nullptr ) ) return;
 	if ( !ensure( JoinMenu != nullptr ) ) return;
 	MenuSwitcher->SetActiveWidget( JoinMenu );
-	if ( m_pMenuInterface != nullptr ) {
+	if ( m_pMenuInterface != nullptr ) 
+	{
 		m_pMenuInterface->RefreshServerList();
 	}
 }
