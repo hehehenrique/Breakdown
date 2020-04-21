@@ -1,12 +1,9 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
 
 #include "MyOnlineGameInstance.h"
-//#include "ThirdParty/Steamworks/Steamv146/sdk/public/steam/isteamfriends.h"
 
-//#include "ThirdParty/Steamworks/Steamv146/sdk/public/steam/steamclientpublic.h"
-//#include "Source/Private/OnlineFriendsInterfaceSteam.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/Image.h"
-#include "EBreakdownGameMode.h"
 #include "Engine/Engine.h"
 #include "GameFramework/PlayerController.h"
 #include "OnlineSessionSettings.h"
@@ -20,7 +17,7 @@ const static FName BCU_BREAKDOWN_AUTH = TEXT("isBCUBreakdown");
 UMyOnlineGameInstance::UMyOnlineGameInstance(const FObjectInitializer& ObjectInitializer)
 	: UGameInstance( ObjectInitializer )
 	, desiredMap("/Game/Levels/Quarry_V6")
-	, m_pMainMenu( nullptr )
+	, m_pMainMenu(nullptr)
 {
 	ConstructorHelpers::FClassFinder<UMainMenu> MainMenuWBPClass(TEXT("/Game/MenuSystem/WBP_OnlineMainMenu"));
 
@@ -143,12 +140,8 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions.!!!"));
 		UE_LOG(LogTemp, Warning, TEXT("%d"), m_pSessionSearch->SearchResults.Num());
-		
-		
-		// Array of FServerData that we will use to create our server list
-		TArray<FServerData> serverDatas;
+		TArray<FString> serverNames;
 
-		// For loop to configure each serverData and populate the array
 		for (const FOnlineSessionSearchResult& searchResult : m_pSessionSearch->SearchResults)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Found Session: %s"), *searchResult.GetSessionIdStr());
@@ -182,123 +175,13 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 			}
 			serverDatas.Add( serverData );
 		}
-		m_pMainMenu->CreateServerList( serverDatas );
+		m_pMainMenu->CreateServerList(serverNames);
 	}
 	else 
 	{
-		UE_LOG( LogTemp, Warning, TEXT( "Finished Finding Sessions BUUUUUUUUUT." ) );
+		UE_LOG(LogTemp, Warning, TEXT("Finished Finding Sessions BUUUUUUUUUT."));
 	}
 }
-
-//
-//int iImage = SteamFriends()->GetMediumFriendAvatar(playerSteamID);
-//HGAMETEXTURE hTexture = 0;
-//if (iImage != -1)
-//hTexture = GetSteamImageAsTexture(iImage);
-//
-//RECT rect;
-//switch (i)
-//{
-//case 0:
-//	rect.top = nHudPaddingVertical;
-//	rect.bottom = rect.top + nAvatarHeight;
-//	rect.left = nHudPaddingHorizontal;
-//	rect.right = rect.left + scorewidth;
-//
-//	if (hTexture)
-//	{
-//		m_pGameEngine->BDrawTexturedRect((float)rect.left, (float)rect.top, (float)rect.left + nAvatarWidth, (float)rect.bottom,
-//			0.0f, 0.0f, 1.0, 1.0, D3DCOLOR_ARGB(255, 255, 255, 255), hTexture);
-//		rect.left += nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//		rect.right += nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//	}
-//
-//	sprintf_safe(rgchBuffer, "%s\nScore: %2u %s", rgchPlayerName, m_rguPlayerScores[i], pszVoiceState);
-//	m_pGameEngine->BDrawString(m_hHUDFont, rect, g_rgPlayerColors[i], TEXTPOS_LEFT | TEXTPOS_VCENTER, rgchBuffer);
-//	break;
-//case 1:
-//
-//	rect.top = nHudPaddingVertical;
-//	rect.bottom = rect.top + nAvatarHeight;
-//	rect.left = width - nHudPaddingHorizontal - scorewidth;
-//	rect.right = width - nHudPaddingHorizontal;
-//
-//	if (hTexture)
-//	{
-//		m_pGameEngine->BDrawTexturedRect((float)rect.right - nAvatarWidth, (float)rect.top, (float)rect.right, (float)rect.bottom,
-//			0.0f, 0.0f, 1.0, 1.0, D3DCOLOR_ARGB(255, 255, 255, 255), hTexture);
-//		rect.right -= nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//		rect.left -= nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//	}
-//
-//	sprintf_safe(rgchBuffer, "%s\nScore: %2u ", rgchPlayerName, m_rguPlayerScores[i]);
-//	m_pGameEngine->BDrawString(m_hHUDFont, rect, g_rgPlayerColors[i], TEXTPOS_RIGHT | TEXTPOS_VCENTER, rgchBuffer);
-//	break;
-//case 2:
-//	rect.top = height - nHudPaddingVertical - nAvatarHeight;
-//	rect.bottom = rect.top + nAvatarHeight;
-//	rect.left = nHudPaddingHorizontal;
-//	rect.right = rect.left + scorewidth;
-//
-//	if (hTexture)
-//	{
-//		m_pGameEngine->BDrawTexturedRect((float)rect.left, (float)rect.top, (float)rect.left + nAvatarWidth, (float)rect.bottom,
-//			0.0f, 0.0f, 1.0, 1.0, D3DCOLOR_ARGB(255, 255, 255, 255), hTexture);
-//		rect.right += nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//		rect.left += nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//	}
-//
-//	sprintf_safe(rgchBuffer, "%s\nScore: %2u %s", rgchPlayerName, m_rguPlayerScores[i], pszVoiceState);
-//	m_pGameEngine->BDrawString(m_hHUDFont, rect, g_rgPlayerColors[i], TEXTPOS_LEFT | TEXTPOS_BOTTOM, rgchBuffer);
-//	break;
-//case 3:
-//	rect.top = height - nHudPaddingVertical - nAvatarHeight;
-//	rect.bottom = rect.top + nAvatarHeight;
-//	rect.left = width - nHudPaddingHorizontal - scorewidth;
-//	rect.right = width - nHudPaddingHorizontal;
-//
-//	if (hTexture)
-//	{
-//		m_pGameEngine->BDrawTexturedRect((float)rect.right - nAvatarWidth, (float)rect.top, (float)rect.right, (float)rect.bottom,
-//			0.0f, 0.0f, 1.0, 1.0, D3DCOLOR_ARGB(255, 255, 255, 255), hTexture);
-//		rect.right -= nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//		rect.left -= nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//	}
-//
-//	sprintf_safe(rgchBuffer, "%s\nScore: %2u %s", rgchPlayerName, m_rguPlayerScores[i], pszVoiceState);
-//	m_pGameEngine->BDrawString(m_hHUDFont, rect, g_rgPlayerColors[i], TEXTPOS_RIGHT | TEXTPOS_BOTTOM, rgchBuffer);
-//	break;
-//default:
-//	OutputDebugString("DrawHUDText() needs updating for more players\n");
-//	break;
-//}
-//	}
-//
-//	// Draw a Steam Input tooltip
-//	if (m_pGameEngine->BIsSteamInputDeviceActive())
-//	{
-//		char rgchHint[128];
-//		const char* rgchFireOrigin = m_pGameEngine->GetTextStringForControllerOriginDigital(eControllerActionSet_ShipControls, eControllerDigitalAction_FireLasers);
-//
-//		if (strcmp(rgchFireOrigin, "None") == 0)
-//		{
-//			sprintf_safe(rgchHint, "No Fire action bound.");
-//		}
-//		else
-//		{
-//			sprintf_safe(rgchHint, "Press '%s' to Fire", rgchFireOrigin);
-//		}
-//
-//		RECT rect;
-//		int nBorder = 30;
-//		rect.top = m_pGameEngine->GetViewportHeight() - nBorder;
-//		rect.bottom = m_pGameEngine->GetViewportHeight() * 2;
-//		rect.left = nBorder;
-//		rect.right = m_pGameEngine->GetViewportWidth();
-//		m_pGameEngine->BDrawString(m_hHUDFont, rect, D3DCOLOR_ARGB(255, 255, 255, 255), TEXTPOS_LEFT | TEXTPOS_TOP, rgchHint);
-//	}
-
-
 
 void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSessionCompleteResult::Type result )
 {
@@ -324,15 +207,15 @@ void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSes
 
 	UE_LOG(LogTemp, Warning, TEXT("OnJoinSessionComplete called. ClientTravel will be called in next line. Joining address %s"), *address);
 
-	PlayerController->ClientTravel((address), ETravelType::TRAVEL_Absolute);
+	PlayerController->ClientTravel(FString::Printf(*address), ETravelType::TRAVEL_Absolute);
 }
 
 void UMyOnlineGameInstance::CreateSession()
 {
-	if ( m_pSessionInterface.IsValid() )
+	if (m_pSessionInterface.IsValid())
 	{
 		FOnlineSessionSettings sessionSettings;
-		if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+		if (IOnlineSubsystem::Get()->GetSubsystemName() == "NULL")
 		{
 			sessionSettings.bIsLANMatch = true;
 		}
@@ -340,10 +223,8 @@ void UMyOnlineGameInstance::CreateSession()
 		{
 			sessionSettings.bIsLANMatch = false;
 		}
-		// Set number of max players
-		sessionSettings.NumPublicConnections = 10;
 
-		// Set server visibility
+		sessionSettings.NumPublicConnections = 10;
 		sessionSettings.bShouldAdvertise = true;
 		sessionSettings.bUsesPresence = true;
 
@@ -362,6 +243,7 @@ void UMyOnlineGameInstance::Join(const FString& Address)
 {
 	if (m_pMainMenu != nullptr)
 	{
+		m_pMainMenu->CreateServerList({ "heello i debug" });
 	}
 	//UEngine* Engine = GetEngine();
 	//if ( !ensure( Engine != nullptr ) )

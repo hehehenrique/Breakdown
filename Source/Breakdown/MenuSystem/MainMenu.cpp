@@ -78,7 +78,7 @@ bool UMainMenu::Initialize()
 		HostButton->OnClicked.AddDynamic( this, &UMainMenu::HostServer );
 		JoinButton->OnClicked.AddDynamic( this, &UMainMenu::OpenJoinMenu );
 		ConnectToIPButton->OnClicked.AddDynamic( this, &UMainMenu::JoinServer );
-		BackToMainMenuButton->OnClicked.AddDynamic( this, &UMainMenu::OpenOnlineMenu );
+		BackToMainMenuButton->OnClicked.AddDynamic( this, &UMainMenu::OpenMainMenu );
 		return true;
 	}
 	else return false;
@@ -96,19 +96,20 @@ void UMainMenu::HostServer()
 	}
 }
 
-void UMainMenu::CreateServerList(TArray<FServerData> serverDatas )
+void UMainMenu::CreateServerList(TArray<FString> ServerNames)
 {
 
 	ServerList->ClearChildren();
 	uint32 serverRowIndex = 0;
-	for ( const FServerData& serverData : serverDatas )
+	for ( const FString& serverName : ServerNames ) 
 	{
 		UServerRow* serverRow = CreateWidget < UServerRow >( this, ServerRowClass );
 		if ( !ensure( serverRow != nullptr ) ) 
 		{
 			return;
 		}
-		serverRow->Setup( serverData, this, serverRowIndex );
+		serverRow->ServerName->SetText( FText::FromString( serverName ) );
+		serverRow->Setup( this, serverRowIndex );
 		++serverRowIndex;
 		ServerList->AddChild( serverRow );
 	}
@@ -137,15 +138,14 @@ void UMainMenu::OpenJoinMenu()
 	if ( !ensure( MenuSwitcher != nullptr ) ) return;
 	if ( !ensure( JoinMenu != nullptr ) ) return;
 	MenuSwitcher->SetActiveWidget( JoinMenu );
-	if ( m_pMenuInterface != nullptr ) 
-	{
+	if ( m_pMenuInterface != nullptr ) {
 		m_pMenuInterface->RefreshServerList();
 	}
 }
 
-void UMainMenu::OpenOnlineMenu() 
+void UMainMenu::OpenMainMenu() 
 {
 	if ( !ensure( MenuSwitcher != nullptr ) ) return;
-	if ( !ensure( OnlineMenu != nullptr ) ) return;
-	MenuSwitcher->SetActiveWidget(OnlineMenu);
+	if ( !ensure( MainMenu != nullptr ) ) return;
+	MenuSwitcher->SetActiveWidget( MainMenu );
 }

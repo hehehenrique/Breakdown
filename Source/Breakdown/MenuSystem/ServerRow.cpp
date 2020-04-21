@@ -4,41 +4,12 @@
 #include "ServerRow.h"
 
 #include "Components/Button.h"
-#include "Components/TextBlock.h"
 #include "MainMenu.h"
 
-
-void UServerRow::Setup(const FServerData serverData, UMainMenu* pParent, uint32 index )
+void UServerRow::Setup( UMainMenu* pParent, uint32 index )
 {
-	// set server name
-	ServerName->SetText(FText::FromString(serverData.name));
-
-	// set host username
-	HostUsername->SetText(FText::FromString(serverData.hostUsername));
-	
-	// set gamemode text with enum switch
-	switch (serverData.gameMode)
-	{
-		case EBreakdownGameMode::FreeForAll:
-		GameMode->SetText(FText::FromString(FString::Printf(TEXT("Free For All"))));
-		break;
-		case EBreakdownGameMode::TeamDeathMatch:
-		GameMode->SetText(FText::FromString(FString::Printf(TEXT("TDM"))));
-		break;
-		default:
-		GameMode->SetText(FText::FromString( FString::Printf(TEXT("UNDEFINED"))));
-		break;
-	}
-
-	// set connection fraction (current/max)
-	FString currentConectionsText = FString::Printf(TEXT("%d/%d"), serverData.currentPlayers, serverData.maxPlayers);
-	CurrentConnections->SetText(FText::FromString(currentConectionsText));
-	
-	// set the rest of the data
 	m_pParent = pParent;
 	m_index = index;
-
-	// add button functionality
 	RowButton->OnClicked.AddDynamic(this, &UServerRow::OnClicked);
 }
 
