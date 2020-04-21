@@ -3,26 +3,10 @@
 #pragma once
 
 #include "Blueprint/UserWidget.h"
-#include "Breakdown/EBreakdownGameMode.h"
 #include "CoreMinimal.h"
 #include "MenuInterface.h"
 
 #include "MainMenu.generated.h"
-
-
-
-USTRUCT()
-struct FServerData
-{
-	GENERATED_BODY()
-	
-	FString name;
-	uint16	currentPlayers;
-	uint16	maxPlayers;
-	FString hostUsername;
-	EBreakdownGameMode gameMode;
-};
-
 
 /**
  * 
@@ -31,14 +15,16 @@ UCLASS()
 class BREAKDOWN_API UMainMenu : public UUserWidget
 {
 	GENERATED_BODY()
+			
+
 		
 public:		
-	UMainMenu( const FObjectInitializer& ObjectInitializer );
+	UMainMenu(const FObjectInitializer& ObjectInitializer);
 
 	void SetMenuInterface( IMenuInterface* MenuInterface );
 	void Setup();
 
-	void CreateServerList( TArray<FServerData> serverDatas );
+	void CreateServerList(TArray<FString> ServerNames);
 	void SelectIndex(uint32 index);
 
 protected:
@@ -68,7 +54,7 @@ private:
 		class UWidget* JoinMenu;
 		
 		UPROPERTY(meta = (BindWidget))
-		class UWidget* OnlineMenu;		
+		class UWidget* MainMenu;		
 
 		UPROPERTY(meta = (BindWidget))
 		class UPanelWidget* ServerList;
@@ -83,7 +69,7 @@ private:
 		void OpenJoinMenu();
 		
 		UFUNCTION(BlueprintCallable)
-		void OpenOnlineMenu();
+		void OpenMainMenu();
 
 
 		TOptional<uint32> m_selectedIndex;
