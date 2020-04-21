@@ -15,6 +15,7 @@
 
 const static FName SESSION_NAME = TEXT("BCU Breakdown");
 const static FName GAMEMODE_SESSION_KEY = TEXT("EBreakdownGameMode");
+const static FName BCU_BREAKDOWN_AUTH = TEXT("isBCUBreakdown");
 
 UMyOnlineGameInstance::UMyOnlineGameInstance(const FObjectInitializer& ObjectInitializer)
 	: UGameInstance( ObjectInitializer )
@@ -129,6 +130,7 @@ void UMyOnlineGameInstance::RefreshServerList()
 		//m_pSessionSearch->bIsLanQuery = true;
 		m_pSessionSearch->MaxSearchResults = 200; // Need to set this to a high number so we can then filter out lobbies that are not Breakdown. This is because we are using the default steam dev app id 480
 		m_pSessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
+		m_pSessionSearch->QuerySettings.Set(BCU_BREAKDOWN_AUTH, true, EOnlineComparisonOp::Equals);
 		UE_LOG(LogTemp, Warning, TEXT("Started Finding Sessions"));
 
 		m_pSessionInterface->FindSessions(0, m_pSessionSearch.ToSharedRef());
@@ -163,9 +165,11 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 		
 			//CSteamID hostSteamID ( dynamic_cast<uint64>( *hostUserID->ToString() ) );
 			UE_LOG(LogTemp, Warning, TEXT("Host ID: %s"), *hostUserID->ToString());
-			if(IOnlineSubsystem::Get()->GetSubsystemName() != "NULL")
-			int32 steamID = (FCString::Atoi(*hostUserID->ToString()));
-
+			if (IOnlineSubsystem::Get()->GetSubsystemName() != "NULL")
+			{
+				int32 steamID = (FCString::Atoi(*hostUserID->ToString()));
+				UE_LOG(LogTemp, Warning, TEXT("Steam ID: %d"), steamID);
+			}
 			// Get the GameMode key and set the relevant struct var
 			const FOnlineSessionSetting* pGameModeKey = ( searchResult.Session.SessionSettings.Settings.Find(GAMEMODE_SESSION_KEY));
 			// If found key
@@ -345,8 +349,11 @@ void UMyOnlineGameInstance::CreateSession()
 
 		// Set Game Mode(passed as an int32 key value)
 		auto sessionGameMode = static_cast< int32 >( EBreakdownGameMode::FreeForAll );
-		sessionSettings.Set( GAMEMODE_SESSION_KEY, sessionGameMode, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing );
-
+		
+		sessionSettings.Set(GAMEMODE_SESSION_KEY, sessionGameMode, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+		
+		sessionSettings.Set(BCU_BREAKDOWN_AUTH, true, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+		
 		m_pSessionInterface->CreateSession(0, SESSION_NAME, sessionSettings);
 	}
 }
