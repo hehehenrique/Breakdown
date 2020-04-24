@@ -16,6 +16,7 @@
 const static FName SESSION_NAME = TEXT("BCU Breakdown");
 const static FName GAMEMODE_SESSION_KEY = TEXT("EBreakdownGameMode");
 const static FName BCU_BREAKDOWN_AUTH_KEY = TEXT("isBCUBreakdown");
+const static FName SERVER_NAME = TEXT("ServerName");
 
 UMyOnlineGameInstance::UMyOnlineGameInstance(const FObjectInitializer& ObjectInitializer)
 	: UGameInstance( ObjectInitializer )
@@ -77,18 +78,19 @@ UMainMenu* UMyOnlineGameInstance::LoadOnlineMenu()
 	return m_pMainMenu;
 }
 
-void UMyOnlineGameInstance::Host()
+void UMyOnlineGameInstance::Host(const FServerData& serverData)
 {
+	m_hostingServerData = serverData;
 	if (m_pSessionInterface.IsValid())
 	{
 		FNamedOnlineSession* existingSession = m_pSessionInterface->GetNamedSession(SESSION_NAME);
 		if (existingSession != nullptr)
 		{
-			m_pSessionInterface->DestroySession(SESSION_NAME);
+			m_pSessionInterface->DestroySession(SESSION_NAME);	
 		}
 		else
 		{
-			CreateSession();
+			CreateSession(serverData);
 		}
 	}
 }
@@ -118,7 +120,7 @@ void UMyOnlineGameInstance::OnCreateSessionComplete_Implementation( FName sessio
 void UMyOnlineGameInstance::OnDestroySessionComplete_Implementation( FName sessionName, bool success ) {
 	if (success) 
 	{
-		CreateSession();
+		CreateSession(m_hostingServerData);
 	}
 }
 
@@ -175,9 +177,9 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 				UE_LOG(LogTemp, Warning, TEXT("Steam ID: %d"), steamID);
 			}
 
-
 			// Get the GameMode key and set the relevant struct var
 			const FOnlineSessionSetting* pGameModeKey = ( searchResult.Session.SessionSettings.Settings.Find(GAMEMODE_SESSION_KEY));
+			
 			// If found key
 			if(pGameModeKey)
 			{
@@ -209,12 +211,32 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 					UE_LOG(LogTemp, Warning, TEXT("This server has an authentic key, but is set to false."));
 				}
 			}
-			else
+			else // If not, this is not a valid server for our game
 			{
 				isValidServer = false;
 				UE_LOG(LogTemp, Warning, TEXT("This server does not have the authentic key."));
 			}
-				// If not, this is not a valid server for our game
+				
+
+
+			// Get the ServerName key and set the relevant struct var
+			const FOnlineSessionSetting* pServerNameKey = (searchResult.Session.SessionSettings.Settings.Find(SERVER_NAME));
+
+			// If found key
+			if (pServerNameKey)
+			{
+				FString serverName;
+				pServerNameKey->Data.GetValue(serverName);
+				serverData.name = serverName;
+				UE_LOG(LogTemp, Warning, TEXT("Found server name: %s"), *serverName);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Could not find server name."));
+				isValidServer = false;
+			}
+
+
 
 			// Finally, if server is valid, insert in server list
 			if( isValidServer )
@@ -367,7 +389,7 @@ void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSes
 	PlayerController->ClientTravel((address), ETravelType::TRAVEL_Absolute);
 }
 
-void UMyOnlineGameInstance::CreateSession()
+void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 {
 	if ( m_pSessionInterface.IsValid() )
 	{
@@ -381,19 +403,21 @@ void UMyOnlineGameInstance::CreateSession()
 			sessionSettings.bIsLANMatch = false;
 		}
 		// Set number of max players
-		sessionSettings.NumPublicConnections = 10;
+		sessionSettings.NumPublicConnections = serverData.maxPlayers;
 
 		// Set server visibility
 		sessionSettings.bShouldAdvertise = true;
 		sessionSettings.bUsesPresence = true;
 
 		// Set Game Mode(passed as an int32 key value)
-		auto sessionGameMode = static_cast< int32 >( EBreakdownGameMode::FreeForAll );
+		auto sessionGameMode = static_cast< int32 >( serverData.gameMode );
 		
 		sessionSettings.Set(GAMEMODE_SESSION_KEY, sessionGameMode, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 		
 		sessionSettings.Set(BCU_BREAKDOWN_AUTH_KEY, true, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 		
+		sessionSettings.Set(SERVER_NAME, serverData.name, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+
 		m_pSessionInterface->CreateSession(0, SESSION_NAME, sessionSettings);
 	}
 }

@@ -6,6 +6,8 @@
 #include "UObject/Interface.h"
 #include "MenuInterface.generated.h"
 
+struct FServerData;
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UMenuInterface : public UInterface
@@ -13,16 +15,13 @@ class UMenuInterface : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class BREAKDOWN_API IMenuInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void Host() = 0;
+	virtual void Host( const FServerData& serverData ) = 0;
 	virtual void Join( const FString& address ) = 0;
 	virtual void Join( const uint32 index ) = 0;
 	virtual void RefreshServerList() = 0;

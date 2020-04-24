@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "FServerData.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "MenuSystem/MenuInterface.h"
 #include "OnlineSubsystem.h"
@@ -11,9 +12,6 @@
 
 class UMainMenu;
 
-/**
- * 
- */
 UCLASS()
 class BREAKDOWN_API UMyOnlineGameInstance : public UGameInstance, public IMenuInterface
 {
@@ -24,13 +22,13 @@ public:
 
 	virtual void Init();
 
-	UFUNCTION(BlueprintCallable)
-		UMainMenu* LoadOnlineMenu();
+	UFUNCTION ( BlueprintCallable )
+	UMainMenu* LoadOnlineMenu();
 
-	UFUNCTION(Exec)
-		virtual void Host() override;
+	UFUNCTION ( Exec )
+	virtual void Host(const FServerData& serverData) override;
 
-	UFUNCTION(Exec)
+	UFUNCTION ( Exec )
 	virtual void Join(const FString& address) override;
 	virtual void Join(const uint32 index) override;
 
@@ -42,9 +40,11 @@ private:
 	TSubclassOf< class UUserWidget > MainMenuClass;
 	IOnlineSessionPtr m_pSessionInterface;
 	TSharedPtr< class FOnlineSessionSearch > m_pSessionSearch;
+
+	// If we need to destroy the session before hosting
+	FServerData m_hostingServerData;
 	
-	
-	void CreateSession();
+	void CreateSession(const FServerData& serverData);
 	
 
 
@@ -60,14 +60,13 @@ protected:
 
 	// Callbacks
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Online")
-		void OnCreateSessionComplete(FName sessionName, bool success);
+	void OnCreateSessionComplete(FName sessionName, bool success);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Online")
-		void OnDestroySessionComplete(FName sessionName, bool success);
+	void OnDestroySessionComplete(FName sessionName, bool success);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Online")
-		void OnFindSessionsComplete(bool success);
+	void OnFindSessionsComplete(bool success);
 
-		void OnJoinSessionComplete(FName sessionName, EOnJoinSessionCompleteResult::Type result);
-
+	void OnJoinSessionComplete(FName sessionName, EOnJoinSessionCompleteResult::Type result);
 };

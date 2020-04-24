@@ -7,6 +7,8 @@
 #include "Components/EditableTextBox.h"
 #include "Components/TextBlock.h"
 #include "Components/WidgetSwitcher.h"
+#include "Breakdown/FServerData.h"
+#include "Misc/DefaultValueHelper.h"
 #include "ServerRow.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -37,7 +39,7 @@ void UMainMenu::Setup()
 	InputModeData.SetWidgetToFocus( this->TakeWidget() );
 	InputModeData.SetLockMouseToViewportBehavior( EMouseLockMode::DoNotLock );
 
-	pPlayerCon->SetInputMode(InputModeData);
+	pPlayerCon->SetInputMode( InputModeData );
 	pPlayerCon->bShowMouseCursor = true;
 }
 
@@ -74,11 +76,17 @@ bool UMainMenu::Initialize()
 		if ( !ensure( JoinButton != nullptr ) ) return false;
 		if ( !ensure( BackToMainMenuButton != nullptr ) ) return false;
 		if ( !ensure( ConnectToIPButton != nullptr ) ) return false;
+		if ( !ensure( CreateSessionButton != nullptr ) ) return false;
 		
-		HostButton->OnClicked.AddDynamic( this, &UMainMenu::HostServer );
+		// Main Online Menu
+		HostButton->OnClicked.AddDynamic(this, &UMainMenu::OpenHostMenu);
 		JoinButton->OnClicked.AddDynamic( this, &UMainMenu::OpenJoinMenu );
+		// Join Servers Menu
 		ConnectToIPButton->OnClicked.AddDynamic( this, &UMainMenu::JoinServer );
 		BackToMainMenuButton->OnClicked.AddDynamic( this, &UMainMenu::OpenOnlineMenu );
+		// Host Server Menu
+		CreateSessionButton->OnClicked.AddDynamic( this, &UMainMenu::HostServer );
+	
 		return true;
 	}
 	else return false;
@@ -88,7 +96,14 @@ void UMainMenu::HostServer()
 {
 	if ( m_pMenuInterface != nullptr )
 	{
-		m_pMenuInterface->Host();
+		
+		FServerData serverData;
+		
+		FDefaultValueHelper::ParseInt(MaxPlayersText->Text.ToString(), serverData.maxPlayers);
+		
+		serverData.name = ServerNameText->Text.ToString();
+
+		m_pMenuInterface->Host( serverData );
 	}
 	else 
 	{
@@ -148,4 +163,11 @@ void UMainMenu::OpenOnlineMenu()
 	if ( !ensure( MenuSwitcher != nullptr ) ) return;
 	if ( !ensure( OnlineMenu != nullptr ) ) return;
 	MenuSwitcher->SetActiveWidget(OnlineMenu);
+}
+
+void UMainMenu::OpenHostMenu()
+{
+	if (!ensure(MenuSwitcher != nullptr)) return;
+	if (!ensure(HostMenu != nullptr)) return;
+	MenuSwitcher->SetActiveWidget(HostMenu);
 }

@@ -4,29 +4,20 @@
 
 #include "Blueprint/UserWidget.h"
 #include "Breakdown/EBreakdownGameMode.h"
+#include "Breakdown/FServerData.h"
 #include "CoreMinimal.h"
 #include "MenuInterface.h"
-
 #include "MainMenu.generated.h"
 
+class UUserWidget;
+class UButton;
+class UWidgetSwitcher;
+class UWidget;
+class UPanelWidget;
+class UEditableTextBox;
 
 
-USTRUCT()
-struct FServerData
-{
-	GENERATED_BODY()
-	
-	FString name;
-	uint16	currentPlayers;
-	uint16	maxPlayers;
-	FString hostUsername;
-	EBreakdownGameMode gameMode;
-};
 
-
-/**
- * 
- */
 UCLASS()
 class BREAKDOWN_API UMainMenu : public UUserWidget
 {
@@ -47,31 +38,45 @@ protected:
 
 
 private:
-	TSubclassOf< class UUserWidget > ServerRowClass;
+	TSubclassOf< UUserWidget > ServerRowClass;
 
 		UPROPERTY(meta = (BindWidget))
-		class UButton* HostButton;
+		UButton* HostButton;
 
 		UPROPERTY(meta = (BindWidget))
-		class UButton* JoinButton;
+		UButton* JoinButton;
+
+		UPROPERTY(meta = (BindWidget))
+		UButton* ConnectToIPButton;
+
+		UPROPERTY(meta = (BindWidget))
+		UButton* CreateSessionButton;
 		
 		UPROPERTY(meta = (BindWidget))
-		class UButton* ConnectToIPButton;
+		UButton* BackToMainMenuButton;
+
+		UPROPERTY(meta = (BindWidget))
+		UWidgetSwitcher* MenuSwitcher;
+
+		UPROPERTY(meta = (BindWidget))
+		UWidget* JoinMenu;
 		
 		UPROPERTY(meta = (BindWidget))
-		class UButton* BackToMainMenuButton;
+		UWidget* OnlineMenu;
 
 		UPROPERTY(meta = (BindWidget))
-		class UWidgetSwitcher* MenuSwitcher;
+		UWidget* HostMenu;
 
 		UPROPERTY(meta = (BindWidget))
-		class UWidget* JoinMenu;
+		UPanelWidget* ServerList;
+
+		UPROPERTY(meta = (BindWidget))
+		UEditableTextBox* MaxPlayersText;
+
+		UPROPERTY(meta = (BindWidget))
+		UEditableTextBox* ServerNameText;
+
 		
-		UPROPERTY(meta = (BindWidget))
-		class UWidget* OnlineMenu;		
-
-		UPROPERTY(meta = (BindWidget))
-		class UPanelWidget* ServerList;
 
 		UFUNCTION(BlueprintCallable)
 		void HostServer();
@@ -81,10 +86,12 @@ private:
 
 		UFUNCTION(BlueprintCallable)
 		void OpenJoinMenu();
-		
+
 		UFUNCTION(BlueprintCallable)
 		void OpenOnlineMenu();
 
+		UFUNCTION(BlueprintCallable)
+		void OpenHostMenu();
 
 		TOptional<uint32> m_selectedIndex;
 		IMenuInterface* m_pMenuInterface;

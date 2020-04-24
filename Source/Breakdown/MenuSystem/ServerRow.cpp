@@ -3,10 +3,10 @@
 
 #include "ServerRow.h"
 
+#include "Breakdown/FServerData.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "MainMenu.h"
-
 
 void UServerRow::Setup(const FServerData serverData, UMainMenu* pParent, uint32 index )
 {
