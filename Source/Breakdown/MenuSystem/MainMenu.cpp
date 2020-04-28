@@ -134,6 +134,7 @@ void UMainMenu::HostServer()
 		serverData.isLAN = OnlineModeComboString->GetSelectedIndex() == 1;
 
 		m_pMenuInterface->Host( serverData );
+		CreateSessionButton->SetIsEnabled(false);
 	}
 	else 
 	{

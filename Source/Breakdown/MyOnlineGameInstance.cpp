@@ -407,6 +407,8 @@ void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 {
 	if ( m_pSessionInterface.IsValid() )
 	{
+		m_pSessionInterface->CancelMatchmaking(0, SESSION_NAME);
+
 		FOnlineSessionSettings sessionSettings;
 		if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" || serverData.isLAN )
 		{
