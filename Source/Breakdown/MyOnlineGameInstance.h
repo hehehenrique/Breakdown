@@ -23,6 +23,9 @@ public:
 	virtual void Init();
 
 	UFUNCTION ( BlueprintCallable )
+	bool IsRunningSteam();
+
+	UFUNCTION ( BlueprintCallable )
 	UMainMenu* LoadOnlineMenu();
 
 	UFUNCTION ( Exec )
@@ -31,11 +34,11 @@ public:
 	UFUNCTION ( Exec )
 	virtual void Join(const FString& address) override;
 	virtual void Join(const uint32 index) override;
-
+	
+	UFUNCTION( BlueprintCallable )
 	virtual void RefreshServerList() override;
 
 private:
-
 
 	TSubclassOf< class UUserWidget > MainMenuClass;
 	IOnlineSessionPtr m_pSessionInterface;
@@ -45,8 +48,6 @@ private:
 	FServerData m_hostingServerData;
 	
 	void CreateSession(const FServerData& serverData);
-	
-
 
 protected:
 

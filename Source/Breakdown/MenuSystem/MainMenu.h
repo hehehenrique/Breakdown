@@ -9,14 +9,14 @@
 #include "MenuInterface.h"
 #include "MainMenu.generated.h"
 
-class UUserWidget;
 class UButton;
-class UWidgetSwitcher;
-class UWidget;
-class UPanelWidget;
+class UComboBoxString;
 class UEditableTextBox;
-
-
+class UOverlay;
+class UPanelWidget;
+class UUserWidget;
+class UWidget;
+class UWidgetSwitcher;
 
 UCLASS()
 class BREAKDOWN_API UMainMenu : public UUserWidget
@@ -32,11 +32,20 @@ public:
 	void CreateServerList( TArray<FServerData> serverDatas );
 	void SelectIndex(uint32 index);
 
+	const int GetSearchMode();
+
+	UFUNCTION ( BlueprintCallable )
+	UPanelWidget* GetServerList();
+
+	UFUNCTION ( BlueprintCallable )
+	UOverlay* GetFindingServersOverlay();
+
 protected:
 	virtual bool Initialize() override;
 	virtual void OnLevelRemovedFromWorld( ULevel* InLevel, UWorld* InWorld ) override;
 
-
+	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
+	UEditableTextBox* ServerNameText;
 private:
 	TSubclassOf< UUserWidget > ServerRowClass;
 
@@ -73,11 +82,20 @@ private:
 		UPROPERTY(meta = (BindWidget))
 		UEditableTextBox* MaxPlayersText;
 
+
+
 		UPROPERTY(meta = (BindWidget))
-		UEditableTextBox* ServerNameText;
-
+		UComboBoxString* GameModeComboString;
 		
+		UPROPERTY(meta = (BindWidget))
+		UComboBoxString* OnlineModeComboString;
 
+		UPROPERTY(meta = (BindWidget))
+		UComboBoxString* SearchModeBox;
+
+		UPROPERTY(meta = (BindWdiget))
+		UOverlay* FindingServersOverlay;
+		
 		UFUNCTION(BlueprintCallable)
 		void HostServer();
 		
