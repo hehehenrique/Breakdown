@@ -130,7 +130,7 @@ void UMyOnlineGameInstance::RefreshServerList()
 {
 	//m_pSessionInterface->CancelFindSessions();
 	UE_LOG(LogTemp, Warning, TEXT("UMyOnlineGameInstance::RefreshServerList"));
-	m_pMainMenu->GetServerList()->ClearChildren();
+	//m_pMainMenu->GetServerList()->ClearChildren();
 	m_pMainMenu->GetFindingServersOverlay()->SetVisibility(ESlateVisibility::Visible);
 	m_pSessionSearch = MakeShareable(new FOnlineSessionSearch());
 	if (m_pSessionSearch.IsValid())
@@ -149,7 +149,7 @@ void UMyOnlineGameInstance::RefreshServerList()
 		//}
 
 		m_pSessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
-		m_pSessionSearch->QuerySettings.Set(BCU_BREAKDOWN_AUTH_KEY, true, EOnlineComparisonOp::Equals);
+		//m_pSessionSearch->QuerySettings.Set(BCU_BREAKDOWN_AUTH_KEY, true, EOnlineComparisonOp::Equals);
 
 		UE_LOG(LogTemp, Warning, TEXT("Started Finding Sessions"));
 
