@@ -6,6 +6,8 @@
 //#include "Source/Private/OnlineFriendsInterfaceSteam.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
+#include "Components/ScrollBox.h"
+#include "Components/Overlay.h"
 #include "EBreakdownGameMode.h"
 #include "Engine/Engine.h"
 #include "GameFramework/PlayerController.h"
@@ -126,13 +128,29 @@ void UMyOnlineGameInstance::OnDestroySessionComplete_Implementation( FName sessi
 
 void UMyOnlineGameInstance::RefreshServerList()
 {
+	m_pSessionInterface->CancelFindSessions();
+	UE_LOG(LogTemp, Warning, TEXT("UMyOnlineGameInstance::RefreshServerList"));
+	m_pMainMenu->GetServerList()->ClearChildren();
+	m_pMainMenu->GetFindingServersOverlay()->SetVisibility(ESlateVisibility::Visible);
 	m_pSessionSearch = MakeShareable(new FOnlineSessionSearch());
 	if (m_pSessionSearch.IsValid())
 	{
-		//m_pSessionSearch->bIsLanQuery = true;
-		m_pSessionSearch->MaxSearchResults = 200; // Need to set this to a high number so we can then filter out lobbies that are not Breakdown. This is because we are using the default steam dev app id 480
+		// Set Search Mode ( LAN or Online Subsystem? )
+		m_pSessionSearch->bIsLanQuery = m_pMainMenu->GetSearchMode() == 1;
+
+		if (m_pSessionSearch->bIsLanQuery) 
+		{
+			m_pSessionSearch->MaxSearchResults = 10;
+		}
+		else
+		{
+			m_pSessionSearch->MaxSearchResults = 100;
+			// Need to set this to a high number so we can then filter out lobbies that are not Breakdown. This is because we are using the default steam dev app id 480
+		}
+
 		m_pSessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 		m_pSessionSearch->QuerySettings.Set(BCU_BREAKDOWN_AUTH_KEY, true, EOnlineComparisonOp::Equals);
+
 		UE_LOG(LogTemp, Warning, TEXT("Started Finding Sessions"));
 
 		m_pSessionInterface->FindSessions(0, m_pSessionSearch.ToSharedRef());
@@ -245,10 +263,6 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 			}
 		}
 		m_pMainMenu->CreateServerList( serverDatas );
-	}
-	else 
-	{
-		UE_LOG( LogTemp, Warning, TEXT( "Finished Finding Sessions BUUUUUUUUUT." ) );
 	}
 }
 
@@ -393,8 +407,10 @@ void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 {
 	if ( m_pSessionInterface.IsValid() )
 	{
+		m_pSessionInterface->CancelMatchmaking(0, SESSION_NAME);
+
 		FOnlineSessionSettings sessionSettings;
-		if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+		if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" || serverData.isLAN )
 		{
 			sessionSettings.bIsLANMatch = true;
 		}
@@ -451,4 +467,9 @@ void UMyOnlineGameInstance::Join(const uint32 index)
 	if (m_pMainMenu != nullptr)
 	{
 	}
+}
+
+bool UMyOnlineGameInstance::IsRunningSteam()
+{
+	return IOnlineSubsystem::Get()->GetSubsystemName() == "STEAM";
 }

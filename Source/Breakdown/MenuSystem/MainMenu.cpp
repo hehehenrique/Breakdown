@@ -3,11 +3,12 @@
 
 #include "MainMenu.h"
 
+#include "Breakdown/FServerData.h"
 #include "Components/Button.h"
+#include "Components/ComboBoxString.h"
 #include "Components/EditableTextBox.h"
 #include "Components/TextBlock.h"
 #include "Components/WidgetSwitcher.h"
-#include "Breakdown/FServerData.h"
 #include "Misc/DefaultValueHelper.h"
 #include "ServerRow.h"
 #include "UObject/ConstructorHelpers.h"
@@ -101,9 +102,39 @@ void UMainMenu::HostServer()
 		
 		FDefaultValueHelper::ParseInt(MaxPlayersText->Text.ToString(), serverData.maxPlayers);
 		
+		// Set Server Name
 		serverData.name = ServerNameText->Text.ToString();
+		
+		// Set Server GameMode
+		switch (GameModeComboString->GetSelectedIndex())
+		{
+		case 0:
+		{
+			serverData.gameMode = EBreakdownGameMode::FreeForAll;
+		}
+		break;
+		case 1:
+		{
+			serverData.gameMode = EBreakdownGameMode::TeamDeathMatch;
+		}
+		break;
+		case 2:
+		{
+			serverData.gameMode = EBreakdownGameMode::BattleRoyale;
+		}
+		break;
+		default:
+		{
+			serverData.gameMode = EBreakdownGameMode::FreeForAll;
+		}
+		break;
+		}
+
+		// Set Server Online Mode ( Steam / LAN )
+		serverData.isLAN = OnlineModeComboString->GetSelectedIndex() == 1;
 
 		m_pMenuInterface->Host( serverData );
+		CreateSessionButton->SetIsEnabled(false);
 	}
 	else 
 	{
@@ -170,4 +201,19 @@ void UMainMenu::OpenHostMenu()
 	if (!ensure(MenuSwitcher != nullptr)) return;
 	if (!ensure(HostMenu != nullptr)) return;
 	MenuSwitcher->SetActiveWidget(HostMenu);
+}
+
+const int UMainMenu::GetSearchMode()
+{	
+	return SearchModeBox->GetSelectedIndex();
+}
+
+UPanelWidget* UMainMenu::GetServerList()
+{
+	return ServerList;
+}
+
+UOverlay* UMainMenu::GetFindingServersOverlay()
+{
+	return FindingServersOverlay;
 }
