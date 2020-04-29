@@ -159,6 +159,7 @@ void UMainMenu::CreateServerList(TArray<FServerData> serverDatas )
 		++serverRowIndex;
 		ServerList->AddChild( serverRow );
 	}
+	
 }
 
 void UMainMenu::SelectIndex( uint32 index )
