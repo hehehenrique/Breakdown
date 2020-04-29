@@ -101,7 +101,8 @@ void UMainMenu::HostServer()
 		FServerData serverData;
 		
 		FDefaultValueHelper::ParseInt(MaxPlayersText->Text.ToString(), serverData.maxPlayers);
-		
+		UE_LOG(LogTemp, Warning, TEXT("THE NUMBER OF MAX PLAYERS IS %d"), serverData.maxPlayers);
+
 		// Set Server Name
 		serverData.name = ServerNameText->Text.ToString();
 		
@@ -134,7 +135,6 @@ void UMainMenu::HostServer()
 		serverData.isLAN = OnlineModeComboString->GetSelectedIndex() == 1;
 
 		m_pMenuInterface->Host( serverData );
-		CreateSessionButton->SetIsEnabled(false);
 	}
 	else 
 	{

@@ -420,7 +420,7 @@ void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 			sessionSettings.bIsLANMatch = false;
 		}
 		// Set number of max players
-		sessionSettings.NumPublicConnections = 10;
+		sessionSettings.NumPublicConnections = serverData.maxPlayers;
 
 		// Set server visibility
 		sessionSettings.bShouldAdvertise = true;
