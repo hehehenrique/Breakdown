@@ -136,17 +136,17 @@ void UMyOnlineGameInstance::RefreshServerList()
 	if (m_pSessionSearch.IsValid())
 	{
 		// Set Search Mode ( LAN or Online Subsystem? )
-		m_pSessionSearch->bIsLanQuery = m_pMainMenu->GetSearchMode() == 1;
-
-		if (m_pSessionSearch->bIsLanQuery) 
-		{
-			m_pSessionSearch->MaxSearchResults = 10;
-		}
-		else
-		{
-			m_pSessionSearch->MaxSearchResults = 100;
+		//m_pSessionSearch->bIsLanQuery = m_pMainMenu->GetSearchMode() == 1;
+		m_pSessionSearch->bIsLanQuery = false;
+		//if (m_pSessionSearch->bIsLanQuery) 
+		//{
+		//	m_pSessionSearch->MaxSearchResults = 10;
+		//}
+		//else
+		//{
+			m_pSessionSearch->MaxSearchResults = 200;
 			// Need to set this to a high number so we can then filter out lobbies that are not Breakdown. This is because we are using the default steam dev app id 480
-		}
+		//}
 
 		m_pSessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 		m_pSessionSearch->QuerySettings.Set(BCU_BREAKDOWN_AUTH_KEY, true, EOnlineComparisonOp::Equals);
@@ -410,14 +410,14 @@ void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 		m_pSessionInterface->CancelMatchmaking(0, SESSION_NAME);
 
 		FOnlineSessionSettings sessionSettings;
-		if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" || serverData.isLAN )
-		{
-			sessionSettings.bIsLANMatch = true;
-		}
-		else 
-		{
+		//if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" || serverData.isLAN )
+		//{
+		//	sessionSettings.bIsLANMatch = true;
+		//}
+		//else 
+		//{
 			sessionSettings.bIsLANMatch = false;
-		}
+		//}
 		// Set number of max players
 		sessionSettings.NumPublicConnections = serverData.maxPlayers;
 
