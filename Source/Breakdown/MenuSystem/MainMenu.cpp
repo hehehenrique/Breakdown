@@ -131,8 +131,7 @@ void UMainMenu::HostServer()
 		}
 
 		// Set Server Online Mode ( Steam / LAN )
-		// serverData.isLAN = OnlineModeComboString->GetSelectedIndex() == 1;
-		serverData.isLAN = false;
+		serverData.isLAN = OnlineModeComboString->GetSelectedIndex() == 1;
 
 		m_pMenuInterface->Host( serverData );
 		CreateSessionButton->SetIsEnabled(false);
