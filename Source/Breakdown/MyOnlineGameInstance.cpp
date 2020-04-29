@@ -128,7 +128,7 @@ void UMyOnlineGameInstance::OnDestroySessionComplete_Implementation( FName sessi
 
 void UMyOnlineGameInstance::RefreshServerList()
 {
-	m_pSessionInterface->CancelFindSessions();
+	//m_pSessionInterface->CancelFindSessions();
 	UE_LOG(LogTemp, Warning, TEXT("UMyOnlineGameInstance::RefreshServerList"));
 	m_pMainMenu->GetServerList()->ClearChildren();
 	m_pMainMenu->GetFindingServersOverlay()->SetVisibility(ESlateVisibility::Visible);
@@ -407,7 +407,7 @@ void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 {
 	if ( m_pSessionInterface.IsValid() )
 	{
-		m_pSessionInterface->CancelMatchmaking(0, SESSION_NAME);
+		//m_pSessionInterface->CancelMatchmaking(0, SESSION_NAME);
 
 		FOnlineSessionSettings sessionSettings;
 		//if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" || serverData.isLAN )
