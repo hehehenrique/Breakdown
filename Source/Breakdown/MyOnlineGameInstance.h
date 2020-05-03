@@ -68,6 +68,6 @@ protected:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Online")
 	void OnFindSessionsComplete(bool success);
-
+	
 	void OnJoinSessionComplete(FName sessionName, EOnJoinSessionCompleteResult::Type result);
 };
