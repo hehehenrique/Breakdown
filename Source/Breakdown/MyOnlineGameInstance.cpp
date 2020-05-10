@@ -15,6 +15,7 @@
 #include "MenuSystem/MainMenu.h"
 #include "UObject/ConstructorHelpers.h"
 
+// Server Settings FName's
 const static FName SESSION_NAME = TEXT("BCU Breakdown");
 const static FName GAMEMODE_SESSION_KEY = TEXT("EBreakdownGameMode");
 const static FName BCU_BREAKDOWN_AUTH_KEY = TEXT("isBCUBreakdown");
@@ -116,7 +117,8 @@ void UMyOnlineGameInstance::OnCreateSessionComplete_Implementation( FName sessio
 	{
 		return;
 	}
-	World->ServerTravel("/Game/Levels/Quarry_V6?listen");
+	// ServerTravel to specified map with the option "listen", so that it works as a listen server. This way it can receive information from clients
+	World->ServerTravel( desiredMap.Append( "?listen") );
 }
 
 void UMyOnlineGameInstance::OnDestroySessionComplete_Implementation( FName sessionName, bool success ) {
@@ -130,8 +132,11 @@ void UMyOnlineGameInstance::RefreshServerList()
 {
 	 m_pSessionInterface->CancelFindSessions();
 	 UE_LOG(LogTemp, Warning, TEXT("UMyOnlineGameInstance::RefreshServerList"));
-	 m_pMainMenu->GetServerList()->ClearChildren();
-	 m_pMainMenu->GetFindingServersOverlay()->SetVisibility(ESlateVisibility::Visible);
+
+	// Clear the list and activate loading animation
+	m_pMainMenu->GetServerList()->ClearChildren();
+	m_pMainMenu->GetFindingServersOverlay()->SetVisibility(ESlateVisibility::Visible);
+
 	m_pSessionSearch = MakeShareable(new FOnlineSessionSearch());
 	if (m_pSessionSearch.IsValid())
 	{
@@ -148,6 +153,7 @@ void UMyOnlineGameInstance::RefreshServerList()
 			// Need to set this to a high number so we can then filter out lobbies that are not Breakdown. This is because we are using the default steam dev app id 480
 		}
 
+		// Look for servers that use Presence and that have the BCU_BREAKDOWN_AUTH_KEY
 		m_pSessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
 		m_pSessionSearch->QuerySettings.Set(BCU_BREAKDOWN_AUTH_KEY, true, EOnlineComparisonOp::Equals);
 
@@ -262,11 +268,16 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 				serverDatas.Add( serverData );
 			}
 		}
+		// Populate the server list
 		m_pMainMenu->CreateServerList( serverDatas );
 		m_pMainMenu->GetFindingServersOverlay()->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 
+// This next section of commented code is not mine. I have copied it from the example project one gets after downloading the steam sdk,
+// It is a Visual Studio project with all the code for the game "Spacewars". It is official.
+// I copied this part as it references how to get the Steam User Avatar, by making use of the CSteamID class
+// I was not successful in getting this feature to work for module 10.
 //
 //int iImage = SteamFriends()->GetMediumFriendAvatar(playerSteamID);
 //HGAMETEXTURE hTexture = 0;
@@ -401,6 +412,7 @@ void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSes
 
 	UE_LOG(LogTemp, Warning, TEXT("OnJoinSessionComplete called. ClientTravel will be called in next line. Joining address %s"), *address);
 
+	// Perform the ClientTravel to the server address in order to join it
 	PlayerController->ClientTravel((address), ETravelType::TRAVEL_Absolute);
 }
 
@@ -427,8 +439,9 @@ void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 		sessionSettings.bUsesPresence = true;
 
 		// Set Game Mode(passed as an int32 key value)
-		auto sessionGameMode = static_cast< int32 >( serverData.gameMode );
-		
+		const auto sessionGameMode = static_cast< int32 >( serverData.gameMode );
+
+		// Set server settings
 		sessionSettings.Set(GAMEMODE_SESSION_KEY, sessionGameMode, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 		
 		sessionSettings.Set(BCU_BREAKDOWN_AUTH_KEY, true, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
@@ -465,9 +478,9 @@ void UMyOnlineGameInstance::Join(const uint32 index)
 	if (!m_pSessionSearch.IsValid()) return;
 	m_pSessionInterface->JoinSession(0, SESSION_NAME, m_pSessionSearch->SearchResults[index]);
 
-	if (m_pMainMenu != nullptr)
-	{
-	}
+	//if (m_pMainMenu != nullptr)
+	//{
+	//}
 }
 
 bool UMyOnlineGameInstance::IsRunningSteam()
