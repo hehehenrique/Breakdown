@@ -142,7 +142,6 @@ void UMyOnlineGameInstance::RefreshServerList()
 	{
 		// Set Search Mode ( LAN or Online Subsystem? )
 		m_pSessionSearch->bIsLanQuery = m_pMainMenu->GetSearchMode() == 1;
-		//m_pSessionSearch->bIsLanQuery = false;
 		if (m_pSessionSearch->bIsLanQuery) 
 		{
 			m_pSessionSearch->MaxSearchResults = 10;
