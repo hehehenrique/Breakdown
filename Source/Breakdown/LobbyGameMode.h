@@ -18,7 +18,10 @@ public:
 	void PostLogin(APlayerController* NewPlayer) override;
 	void Logout(AController* Exiting) override;
 	void SetDesiredMap( const FString& desiredMap );
-private:
-	uint32 m_playerCount = 0;
+protected:
+	
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	int m_playerCount = 0;
+
 	FString m_desiredMap;
 };
