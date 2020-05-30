@@ -8,7 +8,7 @@ void ALobbyGameMode::PostLogin( APlayerController * NewPlayer )
 {
 	Super::PostLogin( NewPlayer );
 	++m_playerCount;
-	if( m_playerCount >= 2 )
+	if( m_playerCount >= 3 )
 	{
 		UWorld* World = GetWorld();
 		if( !ensure( World != nullptr ) )
