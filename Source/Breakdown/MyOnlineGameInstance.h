@@ -18,25 +18,25 @@ class BREAKDOWN_API UMyOnlineGameInstance : public UGameInstance, public IMenuIn
 	GENERATED_BODY()
 public:
 
-	UMyOnlineGameInstance(const FObjectInitializer& ObjectInitializer);
+	UMyOnlineGameInstance( const FObjectInitializer& ObjectInitializer );
 
 	virtual void Init();
 
-	UFUNCTION ( BlueprintCallable )
-	bool IsRunningSteam();
-
-	UFUNCTION ( BlueprintCallable )
-	UMainMenu* LoadOnlineMenu();
-
-	UFUNCTION ( Exec )
-	virtual void Host(const FServerData& serverData) override;
-
-	UFUNCTION ( Exec )
-	virtual void Join(const FString& address) override;
-	virtual void Join(const uint32 index) override;
-	
 	UFUNCTION( BlueprintCallable )
-	virtual void RefreshServerList() override;
+		bool IsRunningSteam();
+
+	UFUNCTION( BlueprintCallable )
+		UMainMenu* LoadOnlineMenu();
+
+	UFUNCTION( Exec )
+		virtual void Host( const FServerData& serverData ) override;
+
+	UFUNCTION( Exec )
+		virtual void Join( const FString& address ) override;
+	virtual void Join( const uint32 index ) override;
+
+	UFUNCTION( BlueprintCallable )
+		virtual void RefreshServerList() override;
 
 private:
 
@@ -46,28 +46,28 @@ private:
 
 	// If we need to destroy the session before hosting
 	FServerData m_hostingServerData;
-	
-	void CreateSession(const FServerData& serverData);
+
+	void CreateSession( const FServerData& serverData );
 
 protected:
 
 	// Map directory to be loaded
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString desiredMap;
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+		FString desiredMap;
 
 	// Reference to the online menu widget
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UMainMenu* m_pMainMenu;
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+		UMainMenu* m_pMainMenu;
 
 	// Callbacks
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Online")
-	void OnCreateSessionComplete(FName sessionName, bool success);
+	UFUNCTION( BlueprintCallable, BlueprintNativeEvent, Category = "Online" )
+		void OnCreateSessionComplete( FName sessionName, bool success );
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Online")
-	void OnDestroySessionComplete(FName sessionName, bool success);
+	UFUNCTION( BlueprintCallable, BlueprintNativeEvent, Category = "Online" )
+		void OnDestroySessionComplete( FName sessionName, bool success );
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Online")
-	void OnFindSessionsComplete(bool success);
-	
-	void OnJoinSessionComplete(FName sessionName, EOnJoinSessionCompleteResult::Type result);
+	UFUNCTION( BlueprintCallable, BlueprintNativeEvent, Category = "Online" )
+		void OnFindSessionsComplete( bool success );
+
+	void OnJoinSessionComplete( FName sessionName, EOnJoinSessionCompleteResult::Type result );
 };
