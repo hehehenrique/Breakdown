@@ -22,6 +22,8 @@ public:
 	void RemovePlayerState( APlayerState* PlayerState ) override;
 
 protected:
-	UFUNCTION( BlueprintCallable , BlueprintImplementableEvent )
-	void OnPlayerStateAdded( APlayerState* PlayerState );
+	UFUNCTION( BlueprintCallable, BlueprintImplementableEvent )
+		void OnPlayerStateAdded( APlayerState* PlayerState );
+	UFUNCTION( BlueprintCallable, BlueprintImplementableEvent )
+		void OnPlayerStateRemoved( APlayerState* PlayerState );
 };

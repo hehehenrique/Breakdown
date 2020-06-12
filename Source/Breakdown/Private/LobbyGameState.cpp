@@ -11,5 +11,6 @@ void ALobbyGameState::AddPlayerState( APlayerState* PlayerState )
 
 void ALobbyGameState::RemovePlayerState( APlayerState* PlayerState )
 {
+	OnPlayerStateRemoved( PlayerState );
 	Super::RemovePlayerState( PlayerState );
 }
