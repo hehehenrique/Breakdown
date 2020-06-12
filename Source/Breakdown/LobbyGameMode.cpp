@@ -10,16 +10,16 @@ void ALobbyGameMode::PostLogin( APlayerController * NewPlayer )
 	++m_playerCount;
 	if( m_playerCount >= 3 )
 	{
-		UWorld* World = GetWorld();
-		if( !ensure( World != nullptr ) )
-		{
-			return;
-		}
-		bUseSeamlessTravel = true;
-		
-		SetDesiredMap( "/Game/Levels/Quarry_V6" );
-		
-		World->ServerTravel( m_desiredMap.Append( "?listen" ) );
+		//UWorld* World = GetWorld();
+		//if( !ensure( World != nullptr ) )
+		//{
+		//	return;
+		//}
+		//bUseSeamlessTravel = true;
+		//
+		//SetDesiredMap( "/Game/Levels/Quarry_V6" );
+		//
+		//World->ServerTravel( m_desiredMap.Append( "?listen" ) );
 
 	}
 }
@@ -33,4 +33,17 @@ void ALobbyGameMode::Logout( AController * Exiting )
 void ALobbyGameMode::SetDesiredMap( const FString& desiredMap )
 {
 	m_desiredMap = desiredMap;
+}
+
+void ALobbyGameMode::TravelToDesiredLevel()
+{
+	UWorld* World = GetWorld();
+	
+	if( !ensure( World != nullptr ) )
+	{
+		return;
+	}
+	bUseSeamlessTravel = true;
+
+	World->ServerTravel( m_desiredMap.Append( "?listen" ) );
 }

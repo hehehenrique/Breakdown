@@ -18,10 +18,14 @@ public:
 	void PostLogin(APlayerController* NewPlayer) override;
 	void Logout(AController* Exiting) override;
 	void SetDesiredMap( const FString& desiredMap );
+
+	UFUNCTION(BlueprintCallable)
+	void TravelToDesiredLevel();
 protected:
 	
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	int m_playerCount = 0;
-
+	
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FString m_desiredMap;
 };
