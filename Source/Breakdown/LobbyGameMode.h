@@ -21,6 +21,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void TravelToDesiredLevel();
+
 protected:
 	
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
