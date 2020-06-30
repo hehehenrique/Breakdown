@@ -4,6 +4,12 @@
 #include "LobbyGameMode.h"
 #include "Engine/World.h"
 
+void ALobbyGameMode::GenericPlayerInitialization( AController* C )
+{
+	Super::GenericPlayerInitialization( C );
+	GenericPlayerInit( C );
+}
+
 void ALobbyGameMode::PostLogin( APlayerController * NewPlayer )
 {
 	Super::PostLogin( NewPlayer );

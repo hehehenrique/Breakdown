@@ -15,6 +15,8 @@ class BREAKDOWN_API ALobbyGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+	void GenericPlayerInitialization( AController* C ) override;
+
 	void PostLogin(APlayerController* NewPlayer) override;
 	void Logout(AController* Exiting) override;
 	void SetDesiredMap( const FString& desiredMap );
@@ -23,7 +25,10 @@ public:
 	void TravelToDesiredLevel();
 
 protected:
-	
+
+	UFUNCTION( BlueprintCallable, BlueprintImplementableEvent )
+	void GenericPlayerInit( AController* Controller );
+
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	int m_playerCount = 0;
 	
