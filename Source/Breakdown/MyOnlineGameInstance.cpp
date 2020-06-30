@@ -403,6 +403,11 @@ void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 		sessionSettings.bShouldAdvertise = true;
 		sessionSettings.bUsesPresence = true;
 
+
+		sessionSettings.bAllowJoinInProgress = true;
+		sessionSettings.bAllowJoinViaPresence = true;
+		sessionSettings.bIsDedicated = false;
+
 		// Set Game Mode(passed as an int32 key value)
 		const auto sessionGameMode = static_cast< int32 >( serverData.gameMode );
 
