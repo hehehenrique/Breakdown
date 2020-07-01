@@ -18,7 +18,6 @@
 // Server Settings FName's
 const static FName SESSION_NAME = TEXT("BCU Breakdown");
 const static FName GAMEMODE_SESSION_KEY = TEXT("EBreakdownGameMode");
-const static FName BCU_BREAKDOWN_AUTH_KEY = TEXT("isBCUBreakdown");
 const static FName SERVER_NAME = TEXT("ServerName");
 
 UMyOnlineGameInstance::UMyOnlineGameInstance(const FObjectInitializer& ObjectInitializer)
@@ -142,19 +141,11 @@ void UMyOnlineGameInstance::RefreshServerList()
 	{
 		// Set Search Mode ( LAN or Online Subsystem? )
 		m_pSessionSearch->bIsLanQuery = m_pMainMenu->GetSearchMode() == 1;
-		if (m_pSessionSearch->bIsLanQuery) 
-		{
-			m_pSessionSearch->MaxSearchResults = 10;
-		}
-		else
-		{
-			m_pSessionSearch->MaxSearchResults = 200;
-			// Need to set this to a high number so we can then filter out lobbies that are not Breakdown. This is because we are using the default steam dev app id 480
-		}
 
-		// Look for servers that use Presence and that have the BCU_BREAKDOWN_AUTH_KEY
+		m_pSessionSearch->MaxSearchResults = 20;
+
+		// Look for servers that use Presence
 		m_pSessionSearch->QuerySettings.Set(SEARCH_PRESENCE, true, EOnlineComparisonOp::Equals);
-		m_pSessionSearch->QuerySettings.Set(BCU_BREAKDOWN_AUTH_KEY, true, EOnlineComparisonOp::Equals);
 
 		UE_LOG(LogTemp, Warning, TEXT("Started Finding Sessions"));
 
@@ -216,31 +207,6 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 				UE_LOG(LogTemp, Warning, TEXT("Could not find gameMode."));
 				isValidServer = false;
 			}
-			
-			// Get the BCU_BREAKDOWN_AUTH_KEY, so we know if this server is for our game
-			const FOnlineSessionSetting* pAuthenticServerKey = (searchResult.Session.SessionSettings.Settings.Find(BCU_BREAKDOWN_AUTH_KEY));
-			// If found key
-			if ( pAuthenticServerKey )
-			{
-				bool hasAuthenticKey;
-				pAuthenticServerKey->Data.GetValue(hasAuthenticKey);
-				if ( hasAuthenticKey )
-				{
-					UE_LOG(LogTemp, Warning, TEXT("This server has an authentic key."));
-				}
-				else 
-				{
-					isValidServer = false;
-					UE_LOG(LogTemp, Warning, TEXT("This server has an authentic key, but is set to false."));
-				}
-			}
-			else // If not, this is not a valid server for our game
-			{
-				isValidServer = false;
-				UE_LOG(LogTemp, Warning, TEXT("This server does not have the authentic key."));
-			}
-				
-
 
 			// Get the ServerName key and set the relevant struct var
 			const FOnlineSessionSetting* pServerNameKey = (searchResult.Session.SessionSettings.Settings.Find(SERVER_NAME));
@@ -437,14 +403,17 @@ void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 		sessionSettings.bShouldAdvertise = true;
 		sessionSettings.bUsesPresence = true;
 
+
+		sessionSettings.bAllowJoinInProgress = true;
+		sessionSettings.bAllowJoinViaPresence = true;
+		sessionSettings.bIsDedicated = false;
+
 		// Set Game Mode(passed as an int32 key value)
 		const auto sessionGameMode = static_cast< int32 >( serverData.gameMode );
 
 		// Set server settings
 		sessionSettings.Set(GAMEMODE_SESSION_KEY, sessionGameMode, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-		
-		sessionSettings.Set(BCU_BREAKDOWN_AUTH_KEY, true, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-		
+				
 		sessionSettings.Set(SERVER_NAME, serverData.name, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 		m_pSessionInterface->CreateSession(0, SESSION_NAME, sessionSettings);
