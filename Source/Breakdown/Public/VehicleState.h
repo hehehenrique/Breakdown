@@ -20,4 +20,10 @@ public:
 
 	UFUNCTION( BlueprintCallable, BlueprintImplementableEvent )
 		void ReadyForLobbyWidget();
+
+	UFUNCTION( BlueprintCallable, BlueprintImplementableEvent )
+		void CheckOldAgressor( const AVehicleState* agressor );
+
+	UFUNCTION( BlueprintCallable )
+		void StartOldAgressorCheckTimer( float time, const AVehicleState* agressor );
 };
