@@ -1,15 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "LobbyGameState.h"
+#include "OnlineGameState.h"
 
-void ALobbyGameState::AddPlayerState( APlayerState* PlayerState )
+void AOnlineGameState::AddPlayerState( APlayerState* PlayerState )
 {
 	Super::AddPlayerState( PlayerState );
 	OnPlayerStateAdded( PlayerState );
 }
 
-void ALobbyGameState::RemovePlayerState( APlayerState* PlayerState )
+void AOnlineGameState::RemovePlayerState( APlayerState* PlayerState )
 {
 	OnPlayerStateRemoved( PlayerState );
 	Super::RemovePlayerState( PlayerState );
