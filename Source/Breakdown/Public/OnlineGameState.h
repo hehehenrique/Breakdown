@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
-#include "LobbyGameState.generated.h"
+#include "OnlineGameState.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BREAKDOWN_API ALobbyGameState : public AGameStateBase
+class BREAKDOWN_API AOnlineGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 
