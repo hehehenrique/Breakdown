@@ -2,7 +2,6 @@
 
 
 #include "VehicleState.h"
-
 #include "TimerManager.h"
 
 void AVehicleState::OnRep_PlayerName()
@@ -14,13 +13,25 @@ void AVehicleState::OnRep_PlayerName()
 }
 
 
-void AVehicleState::StartOldAgressorCheckTimer( float time, const AVehicleState* agressor )
+void AVehicleState::StartAssistCountdown( float time, const AVehicleState* agressor )
 {
 	// Create FTimerHandle
-	FTimerHandle UniqueHandle;
+	FTimerHandle uniqueHandle;
+	
+	RecentAgressorTimerHandles.Emplace( uniqueHandle );
+	
 	// Create an FTimerDelegate, binding it with the agressor
-	FTimerDelegate OldAgressorCheckDelegate = FTimerDelegate::CreateUObject(this, &AVehicleState::CheckOldAgressor, agressor);
+	FTimerDelegate AssistCountdownDelegate = FTimerDelegate::CreateUObject(this, &AVehicleState::AssistCountdownOver, agressor);
 	
 	// Start timer
-	GetWorldTimerManager().SetTimer( UniqueHandle, OldAgressorCheckDelegate, time, false );
+	GetWorldTimerManager().SetTimer( RecentAgressorTimerHandles.Last(), AssistCountdownDelegate, time, false );
+}
+
+void AVehicleState::ResetAssistCountdown( UPARAM( ref ) FTimerHandle& uniqueHandle, float time, const AVehicleState* agressor )
+{
+	// Create an FTimerDelegate, binding it with the agressor
+	FTimerDelegate AssistCountdownDelegate = FTimerDelegate::CreateUObject( this, &AVehicleState::AssistCountdownOver, agressor );
+		
+	// Set uniqueHandle timer with new time
+	GetWorldTimerManager().SetTimer( uniqueHandle, AssistCountdownDelegate, time, false );
 }

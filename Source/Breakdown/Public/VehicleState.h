@@ -1,18 +1,15 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 #include "VehicleState.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class BREAKDOWN_API AVehicleState : public APlayerState
 {
 	GENERATED_BODY()
+
 
 public:
 	
@@ -21,9 +18,19 @@ public:
 	UFUNCTION( BlueprintCallable, BlueprintImplementableEvent )
 		void ReadyForLobbyWidget();
 
+	// Called when an Assist timer is over, this is meant to be implemented on Blueprints
 	UFUNCTION( BlueprintCallable, BlueprintImplementableEvent )
-		void CheckOldAgressor( const AVehicleState* agressor );
+		void AssistCountdownOver( const AVehicleState* agressor );
 
+	// Create an FTimerHandle and start the timer
 	UFUNCTION( BlueprintCallable )
-		void StartOldAgressorCheckTimer( float time, const AVehicleState* agressor );
+		void StartAssistCountdown( float time, const AVehicleState* agressor );
+
+	// Restart a timer with an existing FTimerHandle
+	UFUNCTION( BlueprintCallable )
+		void ResetAssistCountdown( UPARAM( ref ) FTimerHandle& uniqueHandle, float time, const AVehicleState* agressor );
+
+	// Keep an array of FTimerHandles so we can reset the countdowns when needed
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	TArray<FTimerHandle> RecentAgressorTimerHandles;
 };
