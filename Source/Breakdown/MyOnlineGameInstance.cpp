@@ -70,13 +70,13 @@ UMainMenu* UMyOnlineGameInstance::LoadOnlineMenu()
 		{
 			return nullptr;
 		}
-
 		m_pMainMenu = CreateWidget < UMainMenu >(this, MainMenuClass);
 		m_pMainMenu->bIsFocusable = true;
 
-		m_pMainMenu->Setup();
 		m_pMainMenu->SetMenuInterface(this);
 	}
+	m_pMainMenu->Setup();
+
 	return m_pMainMenu;
 }
 
