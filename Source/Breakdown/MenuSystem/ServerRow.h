@@ -22,7 +22,7 @@ public:
 
 protected:
 	// Server Row Components
-	UPROPERTY( BlueprintReadOnly, meta = ( BindWidget ) )
+	UPROPERTY( meta = ( BindWidget ) )
 	UButton* RowButton;
 
 	UPROPERTY( meta = ( BindWidget ) )
@@ -40,7 +40,7 @@ protected:
 	UPROPERTY( meta = ( BindWidget ) )
 	UTextBlock* CurrentConnections;
 	
-	UPROPERTY( BlueprintReadOnly )
+	UPROPERTY()
 	UMainMenu* m_pParent;
 	
 	uint32 m_index;

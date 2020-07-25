@@ -59,25 +59,24 @@ void UMyOnlineGameInstance::Init()
 
 UMainMenu* UMyOnlineGameInstance::LoadOnlineMenu()
 {
-	if( m_pMainMenu == nullptr )
-	{
-		if( !ensure( MainMenuClass != nullptr ) )
+	if (m_pMainMenu == nullptr) {
+	if (!ensure(MainMenuClass != nullptr))
 		{
 			return nullptr;
 		}
 
 		APlayerController* PlayerController = GetFirstLocalPlayerController();
-		if( !ensure( PlayerController != nullptr ) )
+		if (!ensure(PlayerController != nullptr))
 		{
 			return nullptr;
 		}
 
-		m_pMainMenu = CreateWidget < UMainMenu >( this, MainMenuClass );
+		m_pMainMenu = CreateWidget < UMainMenu >(this, MainMenuClass);
 		m_pMainMenu->bIsFocusable = true;
-		m_pMainMenu->SetMenuInterface( this );
-	}
-	m_pMainMenu->Setup();
 
+		m_pMainMenu->Setup();
+		m_pMainMenu->SetMenuInterface(this);
+	}
 	return m_pMainMenu;
 }
 
