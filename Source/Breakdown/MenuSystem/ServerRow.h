@@ -18,7 +18,9 @@ class BREAKDOWN_API UServerRow : public UUserWidget
 {
 	GENERATED_BODY()
 public:
+
 	void Setup(const FServerData serverData, UMainMenu* pParent, uint32 index);
+	// Toggle background image if selected
 	void ToggleHighlight( bool highlighted );
 
 protected:
