@@ -5,6 +5,7 @@
 
 #include "Breakdown/FServerData.h"
 #include "Components/Button.h"
+#include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "MainMenu.h"
 
@@ -44,5 +45,17 @@ void UServerRow::Setup(const FServerData serverData, UMainMenu* pParent, uint32 
 
 void UServerRow::OnClicked()
 {
-	m_pParent->SelectIndex( m_index );
+	m_pParent->SelectIndex( m_index, this );
+}
+
+void UServerRow::ToggleHighlight( bool highlighted )
+{
+	if( highlighted )
+	{
+		HighlightBackground->SetVisibility( ESlateVisibility::Visible );
+	}
+	else
+	{
+		HighlightBackground->SetVisibility( ESlateVisibility::Collapsed );
+	}
 }

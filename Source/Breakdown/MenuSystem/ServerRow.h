@@ -19,12 +19,16 @@ class BREAKDOWN_API UServerRow : public UUserWidget
 	GENERATED_BODY()
 public:
 	void Setup(const FServerData serverData, UMainMenu* pParent, uint32 index);
+	void ToggleHighlight( bool highlighted );
 
 protected:
 	// Server Row Components
 	UPROPERTY( meta = ( BindWidget ) )
 	UButton* RowButton;
 
+	UPROPERTY( meta = ( BindWidget ) )
+	UImage* HighlightBackground;
+	
 	UPROPERTY( meta = ( BindWidget ) )
 	UTextBlock* GameMode;
 

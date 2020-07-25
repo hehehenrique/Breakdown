@@ -161,9 +161,17 @@ void UMainMenu::CreateServerList(TArray<FServerData> serverDatas )
 	
 }
 
-void UMainMenu::SelectIndex( uint32 index )
+void UMainMenu::SelectIndex( uint32 index, UServerRow* newHighlighted )
 {
+	if( m_pHighlightedServerRow != nullptr )
+	{
+		m_pHighlightedServerRow->ToggleHighlight( false );
+	}
+	m_pHighlightedServerRow = newHighlighted;
+	m_pHighlightedServerRow->ToggleHighlight( true );
+
 	m_selectedIndex = index;
+
 }
 
 void UMainMenu::JoinServer() 

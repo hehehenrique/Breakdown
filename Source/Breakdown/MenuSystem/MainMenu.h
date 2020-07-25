@@ -14,6 +14,7 @@ class UComboBoxString;
 class UEditableTextBox;
 class UOverlay;
 class UPanelWidget;
+class UServerRow;
 class UUserWidget;
 class UWidget;
 class UWidgetSwitcher;
@@ -30,7 +31,7 @@ public:
 	void Setup();
 
 	void CreateServerList( TArray<FServerData> serverDatas );
-	void SelectIndex(uint32 index);
+	void SelectIndex( uint32 index, UServerRow* newHighlighted );
 
 	const int GetSearchMode();
 
@@ -50,8 +51,12 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UWidgetSwitcher* MenuSwitcher;
 
+	UPROPERTY( BlueprintReadWrite )
+	UServerRow* m_pHighlightedServerRow;
+
 	private:
 	TSubclassOf< UUserWidget > ServerRowClass;
+
 
 		UPROPERTY(meta = (BindWidget))
 		UButton* HostButton;
