@@ -46,11 +46,7 @@ protected:
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 	UEditableTextBox* ServerNameText;
-
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UWidgetSwitcher* MenuSwitcher;
-
-	private:
+private:
 	TSubclassOf< UUserWidget > ServerRowClass;
 
 		UPROPERTY(meta = (BindWidget))
@@ -67,6 +63,9 @@ protected:
 		
 		UPROPERTY(meta = (BindWidget))
 		UButton* BackToMainMenuButton;
+
+		UPROPERTY(meta = (BindWidget))
+		UWidgetSwitcher* MenuSwitcher;
 
 		UPROPERTY(meta = (BindWidget))
 		UWidget* JoinMenu;
