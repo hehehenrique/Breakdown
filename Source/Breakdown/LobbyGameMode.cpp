@@ -13,10 +13,7 @@ void ALobbyGameMode::GenericPlayerInitialization( AController* C )
 void ALobbyGameMode::PostLogin( APlayerController * NewPlayer )
 {
 	Super::PostLogin( NewPlayer );
-	++m_playerCount;
-
-
-	
+	++m_playerCount;	
 }
 
 void ALobbyGameMode::Logout( AController * Exiting )

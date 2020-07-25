@@ -225,8 +225,6 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 				isValidServer = false;
 			}
 
-
-
 			// Finally, if server is valid, insert in server list
 			if( isValidServer )
 			{
@@ -238,120 +236,6 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 		m_pMainMenu->GetFindingServersOverlay()->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
-
-// This next section of commented code is not mine. I have copied it from the example project one gets after downloading the steam sdk,
-// It is a Visual Studio project with all the code for the game "Spacewars". It is official.
-// I copied this part as it references how to get the Steam User Avatar, by making use of the CSteamID class
-// I was not successful in getting this feature to work for module 10.
-//
-//int iImage = SteamFriends()->GetMediumFriendAvatar(playerSteamID);
-//HGAMETEXTURE hTexture = 0;
-//if (iImage != -1)
-//hTexture = GetSteamImageAsTexture(iImage);
-//
-//RECT rect;
-//switch (i)
-//{
-//case 0:
-//	rect.top = nHudPaddingVertical;
-//	rect.bottom = rect.top + nAvatarHeight;
-//	rect.left = nHudPaddingHorizontal;
-//	rect.right = rect.left + scorewidth;
-//
-//	if (hTexture)
-//	{
-//		m_pGameEngine->BDrawTexturedRect((float)rect.left, (float)rect.top, (float)rect.left + nAvatarWidth, (float)rect.bottom,
-//			0.0f, 0.0f, 1.0, 1.0, D3DCOLOR_ARGB(255, 255, 255, 255), hTexture);
-//		rect.left += nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//		rect.right += nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//	}
-//
-//	sprintf_safe(rgchBuffer, "%s\nScore: %2u %s", rgchPlayerName, m_rguPlayerScores[i], pszVoiceState);
-//	m_pGameEngine->BDrawString(m_hHUDFont, rect, g_rgPlayerColors[i], TEXTPOS_LEFT | TEXTPOS_VCENTER, rgchBuffer);
-//	break;
-//case 1:
-//
-//	rect.top = nHudPaddingVertical;
-//	rect.bottom = rect.top + nAvatarHeight;
-//	rect.left = width - nHudPaddingHorizontal - scorewidth;
-//	rect.right = width - nHudPaddingHorizontal;
-//
-//	if (hTexture)
-//	{
-//		m_pGameEngine->BDrawTexturedRect((float)rect.right - nAvatarWidth, (float)rect.top, (float)rect.right, (float)rect.bottom,
-//			0.0f, 0.0f, 1.0, 1.0, D3DCOLOR_ARGB(255, 255, 255, 255), hTexture);
-//		rect.right -= nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//		rect.left -= nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//	}
-//
-//	sprintf_safe(rgchBuffer, "%s\nScore: %2u ", rgchPlayerName, m_rguPlayerScores[i]);
-//	m_pGameEngine->BDrawString(m_hHUDFont, rect, g_rgPlayerColors[i], TEXTPOS_RIGHT | TEXTPOS_VCENTER, rgchBuffer);
-//	break;
-//case 2:
-//	rect.top = height - nHudPaddingVertical - nAvatarHeight;
-//	rect.bottom = rect.top + nAvatarHeight;
-//	rect.left = nHudPaddingHorizontal;
-//	rect.right = rect.left + scorewidth;
-//
-//	if (hTexture)
-//	{
-//		m_pGameEngine->BDrawTexturedRect((float)rect.left, (float)rect.top, (float)rect.left + nAvatarWidth, (float)rect.bottom,
-//			0.0f, 0.0f, 1.0, 1.0, D3DCOLOR_ARGB(255, 255, 255, 255), hTexture);
-//		rect.right += nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//		rect.left += nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//	}
-//
-//	sprintf_safe(rgchBuffer, "%s\nScore: %2u %s", rgchPlayerName, m_rguPlayerScores[i], pszVoiceState);
-//	m_pGameEngine->BDrawString(m_hHUDFont, rect, g_rgPlayerColors[i], TEXTPOS_LEFT | TEXTPOS_BOTTOM, rgchBuffer);
-//	break;
-//case 3:
-//	rect.top = height - nHudPaddingVertical - nAvatarHeight;
-//	rect.bottom = rect.top + nAvatarHeight;
-//	rect.left = width - nHudPaddingHorizontal - scorewidth;
-//	rect.right = width - nHudPaddingHorizontal;
-//
-//	if (hTexture)
-//	{
-//		m_pGameEngine->BDrawTexturedRect((float)rect.right - nAvatarWidth, (float)rect.top, (float)rect.right, (float)rect.bottom,
-//			0.0f, 0.0f, 1.0, 1.0, D3DCOLOR_ARGB(255, 255, 255, 255), hTexture);
-//		rect.right -= nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//		rect.left -= nAvatarWidth + nSpaceBetweenAvatarAndScore;
-//	}
-//
-//	sprintf_safe(rgchBuffer, "%s\nScore: %2u %s", rgchPlayerName, m_rguPlayerScores[i], pszVoiceState);
-//	m_pGameEngine->BDrawString(m_hHUDFont, rect, g_rgPlayerColors[i], TEXTPOS_RIGHT | TEXTPOS_BOTTOM, rgchBuffer);
-//	break;
-//default:
-//	OutputDebugString("DrawHUDText() needs updating for more players\n");
-//	break;
-//}
-//	}
-//
-//	// Draw a Steam Input tooltip
-//	if (m_pGameEngine->BIsSteamInputDeviceActive())
-//	{
-//		char rgchHint[128];
-//		const char* rgchFireOrigin = m_pGameEngine->GetTextStringForControllerOriginDigital(eControllerActionSet_ShipControls, eControllerDigitalAction_FireLasers);
-//
-//		if (strcmp(rgchFireOrigin, "None") == 0)
-//		{
-//			sprintf_safe(rgchHint, "No Fire action bound.");
-//		}
-//		else
-//		{
-//			sprintf_safe(rgchHint, "Press '%s' to Fire", rgchFireOrigin);
-//		}
-//
-//		RECT rect;
-//		int nBorder = 30;
-//		rect.top = m_pGameEngine->GetViewportHeight() - nBorder;
-//		rect.bottom = m_pGameEngine->GetViewportHeight() * 2;
-//		rect.left = nBorder;
-//		rect.right = m_pGameEngine->GetViewportWidth();
-//		m_pGameEngine->BDrawString(m_hHUDFont, rect, D3DCOLOR_ARGB(255, 255, 255, 255), TEXTPOS_LEFT | TEXTPOS_TOP, rgchHint);
-//	}
-
-
 
 void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSessionCompleteResult::Type result )
 {
