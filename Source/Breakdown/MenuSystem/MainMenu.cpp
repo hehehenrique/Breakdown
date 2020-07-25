@@ -158,7 +158,18 @@ void UMainMenu::CreateServerList(TArray<FServerData> serverDatas )
 		++serverRowIndex;
 		ServerList->AddChild( serverRow );
 	}
-	
+	// If array of servers isn't empty
+	if( serverDatas.Num() )
+	{
+		// Automatically select first server
+		SelectIndex( 0 );
+	}
+	// If no servers are found
+	else
+	{
+		// Disable connect button
+		ConnectToIPButton->SetIsEnabled( false );
+	}
 }
 
 void UMainMenu::SelectIndex( uint32 index, UServerRow* newHighlighted )
@@ -172,7 +183,29 @@ void UMainMenu::SelectIndex( uint32 index, UServerRow* newHighlighted )
 
 	m_selectedIndex = index;
 
+	ConnectToIPButton->SetIsEnabled( true );
 }
+
+void UMainMenu::SelectIndex( uint32 index )
+{
+	if( m_pHighlightedServerRow != nullptr )
+	{
+		m_pHighlightedServerRow->ToggleHighlight( false );
+	}
+	// Get Server Row in the Server List to highlight
+	auto newHighlighted = Cast<UServerRow> (ServerList->GetChildAt( index ));
+	if( newHighlighted != nullptr )
+	{
+		m_pHighlightedServerRow = newHighlighted;
+		m_pHighlightedServerRow->ToggleHighlight( true );
+	}
+
+	m_selectedIndex = index;
+
+	ConnectToIPButton->SetIsEnabled( true );
+}
+
+
 
 void UMainMenu::JoinServer() 
 {
@@ -192,6 +225,7 @@ void UMainMenu::OpenJoinMenu()
 	if ( !ensure( MenuSwitcher != nullptr ) ) return;
 	if ( !ensure( JoinMenu != nullptr ) ) return;
 	MenuSwitcher->SetActiveWidget( JoinMenu );
+	ConnectToIPButton->SetIsEnabled( false );
 	if ( m_pMenuInterface != nullptr ) 
 	{
 		m_pMenuInterface->RefreshServerList();

@@ -32,6 +32,7 @@ public:
 
 	void CreateServerList( TArray<FServerData> serverDatas );
 	void SelectIndex( uint32 index, UServerRow* newHighlighted );
+	void SelectIndex( uint32 index );
 
 	const int GetSearchMode();
 
@@ -54,6 +55,9 @@ protected:
 	UPROPERTY( BlueprintReadWrite )
 	UServerRow* m_pHighlightedServerRow;
 
+	UPROPERTY( BlueprintReadOnly, meta = ( BindWidget ) )
+	UButton* ConnectToIPButton;
+
 	private:
 	TSubclassOf< UUserWidget > ServerRowClass;
 
@@ -64,8 +68,7 @@ protected:
 		UPROPERTY(meta = (BindWidget))
 		UButton* JoinButton;
 
-		UPROPERTY(meta = (BindWidget))
-		UButton* ConnectToIPButton;
+
 
 		UPROPERTY(meta = (BindWidget))
 		UButton* CreateSessionButton;
