@@ -25,7 +25,7 @@ class BREAKDOWN_API UMainMenu : public UUserWidget
 	GENERATED_BODY()
 		
 public:		
-	//UMainMenu( const FObjectInitializer& ObjectInitializer );
+	UMainMenu( const FObjectInitializer& ObjectInitializer );
 	void SetMenuInterface( IMenuInterface* MenuInterface );
 	void Setup();
 
