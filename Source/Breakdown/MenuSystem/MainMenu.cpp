@@ -11,19 +11,19 @@
 #include "Components/WidgetSwitcher.h"
 #include "Misc/DefaultValueHelper.h"
 #include "ServerRow.h"
-#include "UObject/ConstructorHelpers.h"
+//#include "UObject/ConstructorHelpers.h"
 
-UMainMenu::UMainMenu( const FObjectInitializer& ObjectInitializer )
-	: UUserWidget( ObjectInitializer )
-{
-	ConstructorHelpers::FClassFinder< UUserWidget > ServerRowWBPClass( TEXT( "/Game/MenuSystem/WBP_ServerRow" ) );
-
-	if ( !ensure( ServerRowWBPClass.Class != nullptr ) )
-	{
-		return;
-	}
-	ServerRowClass = ServerRowWBPClass.Class;
-}
+//UMainMenu::UMainMenu( const FObjectInitializer& ObjectInitializer )
+//	: UUserWidget( ObjectInitializer )
+//{
+//	ConstructorHelpers::FClassFinder< UUserWidget > ServerRowWBPClass( TEXT( "/Game/MenuSystem/WBP_ServerRow" ) );
+//
+//	if ( !ensure( ServerRowWBPClass.Class != nullptr ) )
+//	{
+//		return;
+//	}
+//	ServerRowClass = ServerRowWBPClass.Class;
+//}
 
 void UMainMenu::Setup() 
 {

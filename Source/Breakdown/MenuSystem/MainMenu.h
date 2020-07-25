@@ -25,8 +25,7 @@ class BREAKDOWN_API UMainMenu : public UUserWidget
 	GENERATED_BODY()
 		
 public:		
-	UMainMenu( const FObjectInitializer& ObjectInitializer );
-
+	//UMainMenu( const FObjectInitializer& ObjectInitializer );
 	void SetMenuInterface( IMenuInterface* MenuInterface );
 	void Setup();
 
@@ -58,68 +57,71 @@ protected:
 	UPROPERTY( BlueprintReadOnly, meta = ( BindWidget ) )
 	UButton* ConnectToIPButton;
 
-	private:
+
+	UPROPERTY( BlueprintReadWrite, EditAnywhere )
 	TSubclassOf< UUserWidget > ServerRowClass;
 
 
-		UPROPERTY(meta = (BindWidget))
-		UButton* HostButton;
+	private:
 
-		UPROPERTY(meta = (BindWidget))
-		UButton* JoinButton;
+	UPROPERTY(meta = (BindWidget))
+	UButton* HostButton;
+
+	UPROPERTY(meta = (BindWidget))
+	UButton* JoinButton;
 
 
 
-		UPROPERTY(meta = (BindWidget))
-		UButton* CreateSessionButton;
+	UPROPERTY(meta = (BindWidget))
+	UButton* CreateSessionButton;
 		
-		UPROPERTY(meta = (BindWidget))
-		UButton* BackToMainMenuButton;
+	UPROPERTY(meta = (BindWidget))
+	UButton* BackToMainMenuButton;
 
-		UPROPERTY(meta = (BindWidget))
-		UWidget* JoinMenu;
+	UPROPERTY(meta = (BindWidget))
+	UWidget* JoinMenu;
 		
-		UPROPERTY(meta = (BindWidget))
-		UWidget* OnlineMenu;
+	UPROPERTY(meta = (BindWidget))
+	UWidget* OnlineMenu;
 
-		UPROPERTY(meta = (BindWidget))
-		UWidget* HostMenu;
+	UPROPERTY(meta = (BindWidget))
+	UWidget* HostMenu;
 
-		UPROPERTY(meta = (BindWidget))
-		UPanelWidget* ServerList;
+	UPROPERTY(meta = (BindWidget))
+	UPanelWidget* ServerList;
 
-		UPROPERTY(meta = (BindWidget))
-		UEditableTextBox* MaxPlayersText;
+	UPROPERTY(meta = (BindWidget))
+	UEditableTextBox* MaxPlayersText;
 
 
 
-		UPROPERTY(meta = (BindWidget))
-		UComboBoxString* GameModeComboString;
+	UPROPERTY(meta = (BindWidget))
+	UComboBoxString* GameModeComboString;
 		
-		UPROPERTY(meta = (BindWidget))
-		UComboBoxString* OnlineModeComboString;
+	UPROPERTY(meta = (BindWidget))
+	UComboBoxString* OnlineModeComboString;
 
-		UPROPERTY(meta = (BindWidget))
-		UComboBoxString* SearchModeBox;
+	UPROPERTY(meta = (BindWidget))
+	UComboBoxString* SearchModeBox;
 
-		UPROPERTY(meta = (BindWdiget))
-		UOverlay* FindingServersOverlay;
+	UPROPERTY(meta = (BindWdiget))
+	UOverlay* FindingServersOverlay;
 		
-		UFUNCTION(BlueprintCallable)
-		void HostServer();
+	UFUNCTION(BlueprintCallable)
+	void HostServer();
 		
-		UFUNCTION(BlueprintCallable)
-		void JoinServer();
+	UFUNCTION(BlueprintCallable)
+	void JoinServer();
 
-		UFUNCTION(BlueprintCallable)
-		void OpenJoinMenu();
+	UFUNCTION(BlueprintCallable)
+	void OpenJoinMenu();
 
-		UFUNCTION(BlueprintCallable)
-		void OpenOnlineMenu();
+	UFUNCTION(BlueprintCallable)
+	void OpenOnlineMenu();
 
-		UFUNCTION(BlueprintCallable)
-		void OpenHostMenu();
+	UFUNCTION(BlueprintCallable)
+	void OpenHostMenu();
 
-		TOptional<uint32> m_selectedIndex;
-		IMenuInterface* m_pMenuInterface;
+	TOptional<uint32> m_selectedIndex;
+	IMenuInterface* m_pMenuInterface;
 };
