@@ -40,7 +40,6 @@ public:
 
 private:
 
-	TSubclassOf< class UUserWidget > MainMenuClass;
 	IOnlineSessionPtr m_pSessionInterface;
 	TSharedPtr< class FOnlineSessionSearch > m_pSessionSearch;
 
@@ -50,6 +49,9 @@ private:
 	void CreateSession( const FServerData& serverData );
 
 protected:
+	
+	UPROPERTY( EditAnywhere )
+	TSubclassOf< class UUserWidget > MainMenuClass;
 
 	// Map directory to be loaded
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )

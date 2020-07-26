@@ -25,13 +25,6 @@ UMyOnlineGameInstance::UMyOnlineGameInstance(const FObjectInitializer& ObjectIni
 	, desiredMap("/Game/Levels/Quarry_V6")
 	, m_pMainMenu( nullptr )
 {
-	ConstructorHelpers::FClassFinder<UMainMenu> MainMenuWBPClass(TEXT("/Game/MenuSystem/WBP_OnlineMainMenu"));
-
-	if (!ensure(MainMenuWBPClass.Class != nullptr))
-	{
-		return;
-	}
-	MainMenuClass = MainMenuWBPClass.Class;
 }
 
 void UMyOnlineGameInstance::Init()
