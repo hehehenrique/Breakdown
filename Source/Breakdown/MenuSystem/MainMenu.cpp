@@ -27,6 +27,7 @@ UMainMenu::UMainMenu( const FObjectInitializer& ObjectInitializer )
 
 void UMainMenu::Setup() 
 {
+	MenuSwitcher->SetActiveWidget( OnlineMenu );
 	this->AddToViewport();
 
 	UWorld* pWorld = GetWorld();
