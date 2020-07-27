@@ -78,15 +78,14 @@ void UMyOnlineGameInstance::Host(const FServerData& serverData)
 	m_hostingServerData = serverData;
 	if (m_pSessionInterface.IsValid())
 	{
-		FNamedOnlineSession* existingSession = m_pSessionInterface->GetNamedSession(SESSION_NAME);
-		if (existingSession != nullptr)
-		{
-			m_pSessionInterface->DestroySession(SESSION_NAME);	
-		}
-		else
-		{
+		//FNamedOnlineSession* existingSession = m_pSessionInterface->GetNamedSession(SESSION_NAME);
+		//if (existingSession != nullptr)
+		//{
+		//}
+		//else
+		//{
 			CreateSession(serverData);
-		}
+		//}
 	}
 }
 
@@ -144,6 +143,12 @@ void UMyOnlineGameInstance::RefreshServerList()
 
 		m_pSessionInterface->FindSessions(0, m_pSessionSearch.ToSharedRef());
 	}
+}
+
+void UMyOnlineGameInstance::DestroySession()
+{
+	if(m_pSessionInterface != nullptr )
+	m_pSessionInterface->DestroySession( SESSION_NAME );
 }
 
 void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success )
@@ -322,7 +327,6 @@ void UMyOnlineGameInstance::Join(const uint32 index)
 	if (!m_pSessionInterface.IsValid()) return;
 	if (!m_pSessionSearch.IsValid()) return;
 	m_pSessionInterface->JoinSession(0, SESSION_NAME, m_pSessionSearch->SearchResults[index]);
-
 	//if (m_pMainMenu != nullptr)
 	//{
 	//}

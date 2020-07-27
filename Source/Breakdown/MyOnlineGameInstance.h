@@ -38,6 +38,9 @@ public:
 	UFUNCTION( BlueprintCallable )
 		virtual void RefreshServerList() override;
 
+	UFUNCTION( BlueprintCallable )
+		void DestroySession();
+
 private:
 
 	IOnlineSessionPtr m_pSessionInterface;
