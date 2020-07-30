@@ -208,7 +208,7 @@ void UMainMenu::SelectIndex( uint32 index )
 
 
 
-void UMainMenu::JoinServer() 
+void UMainMenu::JoinServer_Implementation() 
 {
 	if ( m_selectedIndex.IsSet() && m_pMenuInterface != nullptr )
 	{

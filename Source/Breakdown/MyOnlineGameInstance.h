@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EConnectionError.h"
 #include "Engine/GameInstance.h"
 #include "FServerData.h"
 #include "Interfaces/OnlineSessionInterface.h"
@@ -75,4 +76,9 @@ protected:
 		void OnFindSessionsComplete( bool success );
 
 	void OnJoinSessionComplete( FName sessionName, EOnJoinSessionCompleteResult::Type result );
+
+	// Runs when an error occurs after trying to join an existing session
+	UFUNCTION( BlueprintImplementableEvent, Category = "Online | Connecting" )
+		void ConnectionAttemptFailed( EConnectionError reason );
+	
 };

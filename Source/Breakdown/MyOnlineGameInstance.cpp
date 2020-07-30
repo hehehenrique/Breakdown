@@ -1,9 +1,6 @@
 
 #include "MyOnlineGameInstance.h"
-//#include "ThirdParty/Steamworks/Steamv146/sdk/public/steam/isteamfriends.h"
 
-//#include "ThirdParty/Steamworks/Steamv146/sdk/public/steam/steamclientpublic.h"
-//#include "Source/Private/OnlineFriendsInterfaceSteam.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Image.h"
 #include "Components/ScrollBox.h"
@@ -237,30 +234,53 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 
 void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSessionCompleteResult::Type result )
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnJoinSessionComplete called"));
-	if ( !m_pSessionInterface.IsValid() ) return;
-	
-	FString address;
-	if ( !m_pSessionInterface->GetResolvedConnectString( sessionName, address ) ) 
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Could not get connect string"));
-		return;
+	UE_LOG( LogTemp, Warning, TEXT( "OnJoinSessionComplete called" ) );
+	switch (result){
+		case EOnJoinSessionCompleteResult::Success:
+		{
+
+			if( !m_pSessionInterface.IsValid() ) return;
+
+			FString address;
+			if( !m_pSessionInterface->GetResolvedConnectString( sessionName, address ) )
+			{
+				UE_LOG( LogTemp, Warning, TEXT( "Could not get connect string" ) );
+				return;
+			}
+
+			UEngine* Engine = GetEngine();
+
+			if( !ensure( Engine != nullptr ) )	return;
+
+			APlayerController* PlayerController = GetFirstLocalPlayerController();
+
+			if( !ensure( PlayerController != nullptr ) ) return;
+
+			Engine->AddOnScreenDebugMessage( 0, 5, FColor::Green, FString::Printf( TEXT( "OnJoinSessionComplete called. Joining address %s" ), *address ) );
+
+			UE_LOG( LogTemp, Warning, TEXT( "OnJoinSessionComplete called. ClientTravel will be called in next line. Joining address %s" ), *address );
+
+			// Perform the ClientTravel to the server address in order to join it
+			PlayerController->ClientTravel( ( address ), ETravelType::TRAVEL_Absolute );
+		}
+		break;
+		case EOnJoinSessionCompleteResult::CouldNotRetrieveAddress:
+		case EOnJoinSessionCompleteResult::SessionDoesNotExist:
+		{
+			ConnectionAttemptFailed( EConnectionError::InvalidSession );
+		}
+		break;
+		case EOnJoinSessionCompleteResult::SessionIsFull:
+		{
+			ConnectionAttemptFailed( EConnectionError::SessionIsFull );
+		}
+		break;
+		default:
+		{
+			ConnectionAttemptFailed( EConnectionError::Unknown );
+		}
+		break;
 	}
-
-	UEngine* Engine = GetEngine();
-
-	if (!ensure(Engine != nullptr))	return;
-	
-	APlayerController* PlayerController = GetFirstLocalPlayerController();
-
-	if (!ensure(PlayerController != nullptr)) return;
-
-	Engine->AddOnScreenDebugMessage(0, 5, FColor::Green, FString::Printf(TEXT("OnJoinSessionComplete called. Joining address %s"), *address));
-
-	UE_LOG(LogTemp, Warning, TEXT("OnJoinSessionComplete called. ClientTravel will be called in next line. Joining address %s"), *address);
-
-	// Perform the ClientTravel to the server address in order to join it
-	PlayerController->ClientTravel((address), ETravelType::TRAVEL_Absolute);
 }
 
 void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
