@@ -25,7 +25,7 @@ public:
 
 protected:
 	// Server Row Components
-	UPROPERTY( meta = ( BindWidget ) )
+	UPROPERTY( BlueprintReadWrite, meta = ( BindWidget ) )
 	UButton* RowButton;
 
 	UPROPERTY( meta = ( BindWidget ) )
