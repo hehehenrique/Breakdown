@@ -62,6 +62,10 @@ protected:
 	TSubclassOf< UUserWidget > ServerRowClass;
 
 
+	UFUNCTION( BlueprintCallable, BlueprintNativeEvent )
+	void JoinServer();
+
+
 	private:
 
 	UPROPERTY(meta = (BindWidget))
@@ -109,9 +113,6 @@ protected:
 		
 	UFUNCTION(BlueprintCallable)
 	void HostServer();
-		
-	UFUNCTION(BlueprintCallable)
-	void JoinServer();
 
 	UFUNCTION(BlueprintCallable)
 	void OpenJoinMenu();
