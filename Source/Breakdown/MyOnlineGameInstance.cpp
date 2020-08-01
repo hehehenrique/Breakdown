@@ -301,6 +301,17 @@ void UMyOnlineGameInstance::UpdateCurrentPlayers( int currentPlayers )
 	m_pSessionInterface->UpdateSession( SESSION_NAME, sessionSettings );
 }
 
+void UMyOnlineGameInstance::UpdateServerVisibility( bool visible )
+{
+	FOnlineSessionSettings sessionSettings = *m_pSessionInterface->GetSessionSettings( SESSION_NAME );
+	
+	sessionSettings.bShouldAdvertise = visible;
+	sessionSettings.bAllowJoinInProgress = visible;
+	sessionSettings.bAllowJoinViaPresence = visible;
+	
+	m_pSessionInterface->UpdateSession( SESSION_NAME, sessionSettings );
+}
+
 void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 {
 	if( m_pSessionInterface.IsValid() )

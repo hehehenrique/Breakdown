@@ -85,4 +85,8 @@ protected:
 	// Runs when a player logs in or out, updates the CurrentPlayer info for players who look for this server
 	UFUNCTION( BlueprintCallable, Category = "Online | Update Session" )
 	void UpdateCurrentPlayers( int currentPlayers );
+
+	// Begins / Stops advertising server, runs when leaving / entering lobby maps
+	UFUNCTION( BlueprintCallable, Category = "Online | Update Session" )
+	void UpdateServerVisibility( bool visible );
 };
