@@ -31,7 +31,7 @@ protected:
 	void GenericPlayerInit( AController* Controller );
 
 	UPROPERTY( EditAnywhere, BlueprintReadOnly )
-	int m_playerCount = 0;
+	int m_playerCount = 1;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FString m_desiredMap;

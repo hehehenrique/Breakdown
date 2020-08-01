@@ -203,7 +203,7 @@ void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success 
 			{
 				int32 serverGameMode;
 				pGameModeKey->Data.GetValue( serverGameMode );
-				serverData.gameMode = static_cast<EBreakdownGameMode>( serverGameMode );
+				serverData.gameMode = static_cast< EBreakdownGameMode >( serverGameMode );
 				UE_LOG( LogTemp, Warning, TEXT( "Found server game mode: %d" ), serverData.gameMode );
 			}
 			else
@@ -247,69 +247,77 @@ void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSes
 	UE_LOG( LogTemp, Warning, TEXT( "OnJoinSessionComplete called" ) );
 	switch( result )
 	{
-		case EOnJoinSessionCompleteResult::Success:
+	case EOnJoinSessionCompleteResult::Success:
+	{
+
+		if( !m_pSessionInterface.IsValid() ) return;
+
+		FString address;
+		if( !m_pSessionInterface->GetResolvedConnectString( sessionName, address ) )
 		{
-
-			if( !m_pSessionInterface.IsValid() ) return;
-
-			FString address;
-			if( !m_pSessionInterface->GetResolvedConnectString( sessionName, address ) )
-			{
-				UE_LOG( LogTemp, Warning, TEXT( "Could not get connect string" ) );
-				return;
-			}
-
-			UEngine* Engine = GetEngine();
-
-			if( !ensure( Engine != nullptr ) )	return;
-
-			APlayerController* PlayerController = GetFirstLocalPlayerController();
-
-			if( !ensure( PlayerController != nullptr ) ) return;
-
-			Engine->AddOnScreenDebugMessage( 0, 5, FColor::Green, FString::Printf( TEXT( "OnJoinSessionComplete called. Joining address %s" ), *address ) );
-
-			UE_LOG( LogTemp, Warning, TEXT( "OnJoinSessionComplete called. ClientTravel will be called in next line. Joining address %s" ), *address );
-
-			// Perform the ClientTravel to the server address in order to join it
-			PlayerController->ClientTravel( ( address ), ETravelType::TRAVEL_Absolute );
+			UE_LOG( LogTemp, Warning, TEXT( "Could not get connect string" ) );
+			return;
 		}
-		break;
-		case EOnJoinSessionCompleteResult::CouldNotRetrieveAddress:
-		case EOnJoinSessionCompleteResult::SessionDoesNotExist:
-		{
-			ConnectionAttemptFailed( EConnectionError::InvalidSession );
-		}
-		break;
-		case EOnJoinSessionCompleteResult::SessionIsFull:
-		{
-			ConnectionAttemptFailed( EConnectionError::SessionIsFull );
-		}
-		break;
-		default:
-		{
-			ConnectionAttemptFailed( EConnectionError::Unknown );
-		}
-		break;
+
+		UEngine* Engine = GetEngine();
+
+		if( !ensure( Engine != nullptr ) )	return;
+
+		APlayerController* PlayerController = GetFirstLocalPlayerController();
+
+		if( !ensure( PlayerController != nullptr ) ) return;
+
+		Engine->AddOnScreenDebugMessage( 0, 5, FColor::Green, FString::Printf( TEXT( "OnJoinSessionComplete called. Joining address %s" ), *address ) );
+
+		UE_LOG( LogTemp, Warning, TEXT( "OnJoinSessionComplete called. ClientTravel will be called in next line. Joining address %s" ), *address );
+
+		// Perform the ClientTravel to the server address in order to join it
+		PlayerController->ClientTravel( ( address ), ETravelType::TRAVEL_Absolute );
+	}
+	break;
+	case EOnJoinSessionCompleteResult::CouldNotRetrieveAddress:
+	case EOnJoinSessionCompleteResult::SessionDoesNotExist:
+	{
+		ConnectionAttemptFailed( EConnectionError::InvalidSession );
+	}
+	break;
+	case EOnJoinSessionCompleteResult::SessionIsFull:
+	{
+		ConnectionAttemptFailed( EConnectionError::SessionIsFull );
+	}
+	break;
+	default:
+	{
+		ConnectionAttemptFailed( EConnectionError::Unknown );
+	}
+	break;
 	}
 }
 
 void UMyOnlineGameInstance::UpdateCurrentPlayers( int currentPlayers )
 {
-	FOnlineSessionSettings sessionSettings = *m_pSessionInterface->GetSessionSettings( SESSION_NAME );
-	sessionSettings.Set( CURRENT_PLAYERS_KEY, currentPlayers, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing );
-	m_pSessionInterface->UpdateSession( SESSION_NAME, sessionSettings );
+	if( m_pSessionInterface.IsValid() )
+	{
+		FOnlineSessionSettings sessionSettings = *m_pSessionInterface->GetSessionSettings( SESSION_NAME );
+		sessionSettings.Set( CURRENT_PLAYERS_KEY, currentPlayers, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing );
+		m_pSessionInterface->UpdateSession( SESSION_NAME, sessionSettings );
+
+		UpdateServerVisibility( sessionSettings.NumPublicConnections > currentPlayers );
+	}
 }
 
 void UMyOnlineGameInstance::UpdateServerVisibility( bool visible )
 {
-	FOnlineSessionSettings sessionSettings = *m_pSessionInterface->GetSessionSettings( SESSION_NAME );
-	
-	sessionSettings.bShouldAdvertise = visible;
-	sessionSettings.bAllowJoinInProgress = visible;
-	sessionSettings.bAllowJoinViaPresence = visible;
-	
-	m_pSessionInterface->UpdateSession( SESSION_NAME, sessionSettings );
+	if( m_pSessionInterface.IsValid() )
+	{
+		FOnlineSessionSettings sessionSettings = *m_pSessionInterface->GetSessionSettings( SESSION_NAME );
+
+		sessionSettings.bShouldAdvertise = visible;
+		sessionSettings.bAllowJoinInProgress = visible;
+		sessionSettings.bAllowJoinViaPresence = visible;
+
+		m_pSessionInterface->UpdateSession( SESSION_NAME, sessionSettings );
+	}
 }
 
 void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
@@ -338,9 +346,9 @@ void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 		sessionSettings.bIsDedicated = false;
 
 		// Set Game Mode ( passed as an int32 key value )
-		const auto sessionGameMode = static_cast<int32>( serverData.gameMode );
+		const auto sessionGameMode = static_cast< int32 >( serverData.gameMode );
 		// Set Current Players
-		const int32 currentPlayers = serverData.currentPlayers;
+		const int32 currentPlayers = 1;
 
 		// Set server settings
 		sessionSettings.Set( CURRENT_PLAYERS_KEY, currentPlayers, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing );

@@ -105,8 +105,8 @@ void UMainMenu::HostServer()
 		FDefaultValueHelper::ParseInt(MaxPlayersText->Text.ToString(), serverData.maxPlayers);
 		UE_LOG(LogTemp, Warning, TEXT("THE NUMBER OF MAX PLAYERS IS %d"), serverData.maxPlayers);
 
-		// Set Current Players (start with 0 because it will later on get incremented)
-		serverData.currentPlayers = 0;
+		// Set Current Players
+		serverData.currentPlayers = 1;
 
 		// Set Server Name
 		serverData.name = ServerNameText->Text.ToString();
