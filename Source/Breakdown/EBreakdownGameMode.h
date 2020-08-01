@@ -3,6 +3,5 @@
 enum class EBreakdownGameMode
 {
     FreeForAll,
-    TeamDeathMatch,
-    BattleRoyale   
+    TeamDeathMatch
 };

@@ -101,8 +101,12 @@ void UMainMenu::HostServer()
 		
 		FServerData serverData;
 		
+		// Set Max Players
 		FDefaultValueHelper::ParseInt(MaxPlayersText->Text.ToString(), serverData.maxPlayers);
 		UE_LOG(LogTemp, Warning, TEXT("THE NUMBER OF MAX PLAYERS IS %d"), serverData.maxPlayers);
+
+		// Set Current Players (start with 0 because it will later on get incremented)
+		serverData.currentPlayers = 0;
 
 		// Set Server Name
 		serverData.name = ServerNameText->Text.ToString();
@@ -112,22 +116,17 @@ void UMainMenu::HostServer()
 		{
 		case 0:
 		{
-			serverData.gameMode = EBreakdownGameMode::FreeForAll;
+			serverData.gameMode = EBreakdownGameMode::TeamDeathMatch;
 		}
 		break;
 		case 1:
 		{
-			serverData.gameMode = EBreakdownGameMode::TeamDeathMatch;
-		}
-		break;
-		case 2:
-		{
-			serverData.gameMode = EBreakdownGameMode::BattleRoyale;
+			serverData.gameMode = EBreakdownGameMode::FreeForAll;
 		}
 		break;
 		default:
 		{
-			serverData.gameMode = EBreakdownGameMode::FreeForAll;
+			serverData.gameMode = EBreakdownGameMode::TeamDeathMatch;
 		}
 		break;
 		}
