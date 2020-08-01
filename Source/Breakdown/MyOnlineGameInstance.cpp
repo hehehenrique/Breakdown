@@ -308,7 +308,7 @@ void UMyOnlineGameInstance::UpdateCurrentPlayers( int currentPlayers )
 
 void UMyOnlineGameInstance::UpdateServerVisibility( bool visible )
 {
-	if( m_pSessionInterface.IsValid() )
+	if( m_pSessionInterface.IsValid() && IsRunningSteam() )
 	{
 		FOnlineSessionSettings sessionSettings = *m_pSessionInterface->GetSessionSettings( SESSION_NAME );
 
