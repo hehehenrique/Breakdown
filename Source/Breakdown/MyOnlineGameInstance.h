@@ -24,23 +24,24 @@ public:
 	virtual void Init();
 
 	UFUNCTION( BlueprintCallable )
-		bool IsRunningSteam();
+	bool IsRunningSteam();
 
 	UFUNCTION( BlueprintCallable )
-		UMainMenu* LoadOnlineMenu();
+	UMainMenu* LoadOnlineMenu();
 
 	UFUNCTION( Exec )
-		virtual void Host( const FServerData& serverData ) override;
+	virtual void Host( const FServerData& serverData ) override;
 
 	UFUNCTION( Exec )
-		virtual void Join( const FString& address ) override;
+	virtual void Join( const FString& address ) override;
+
 	virtual void Join( const uint32 index ) override;
 
 	UFUNCTION( BlueprintCallable )
-		virtual void RefreshServerList() override;
+	virtual void RefreshServerList() override;
 
 	UFUNCTION( BlueprintCallable )
-		void DestroySession();
+	void DestroySession();
 
 private:
 
@@ -59,26 +60,33 @@ protected:
 
 	// Map directory to be loaded
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-		FString desiredMap;
+	FString desiredMap;
 
 	// Reference to the online menu widget
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-		UMainMenu* m_pMainMenu;
+	UMainMenu* m_pMainMenu;
 
 	// Callbacks
 	UFUNCTION( BlueprintCallable, BlueprintNativeEvent, Category = "Online" )
-		void OnCreateSessionComplete( FName sessionName, bool success );
+	void OnCreateSessionComplete( FName sessionName, bool success );
 
 	UFUNCTION( BlueprintCallable, BlueprintNativeEvent, Category = "Online" )
-		void OnDestroySessionComplete( FName sessionName, bool success );
+	void OnDestroySessionComplete( FName sessionName, bool success );
 
 	UFUNCTION( BlueprintCallable, BlueprintNativeEvent, Category = "Online" )
-		void OnFindSessionsComplete( bool success );
+	void OnFindSessionsComplete( bool success );
 
 	void OnJoinSessionComplete( FName sessionName, EOnJoinSessionCompleteResult::Type result );
 
 	// Runs when an error occurs after trying to join an existing session
 	UFUNCTION( BlueprintImplementableEvent, Category = "Online | Connecting" )
-		void ConnectionAttemptFailed( EConnectionError reason );
-	
+	void ConnectionAttemptFailed( EConnectionError reason );
+
+	// Runs when a player logs in or out, updates the CurrentPlayer info for players who look for this server
+	UFUNCTION( BlueprintCallable, Category = "Online | Update Session" )
+	void UpdateCurrentPlayers( int currentPlayers );
+
+	// Begins / Stops advertising server, runs when leaving / entering lobby maps
+	UFUNCTION( BlueprintCallable, Category = "Online | Update Session" )
+	void UpdateServerVisibility( bool visible );
 };

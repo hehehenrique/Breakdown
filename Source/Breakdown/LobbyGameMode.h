@@ -7,21 +7,22 @@
 #include "LobbyGameMode.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class BREAKDOWN_API ALobbyGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-
 public:
+
 	void GenericPlayerInitialization( AController* C ) override;
 
-	void PostLogin(APlayerController* NewPlayer) override;
-	void Logout(AController* Exiting) override;
+	void PostLogin( APlayerController* NewPlayer ) override;
+	void Logout( AController* Exiting ) override;
+
 	void SetDesiredMap( const FString& desiredMap );
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION( BlueprintCallable )
 	void TravelToDesiredLevel();
 
 protected:
@@ -29,9 +30,9 @@ protected:
 	UFUNCTION( BlueprintCallable, BlueprintImplementableEvent )
 	void GenericPlayerInit( AController* Controller );
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	int m_playerCount = 0;
-	
+	UPROPERTY( EditAnywhere, BlueprintReadOnly )
+	int m_playerCount = 1;
+
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	FString m_desiredMap;
 };
