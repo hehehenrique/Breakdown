@@ -82,17 +82,21 @@ void UMyOnlineGameInstance::Host( const FServerData& serverData )
 
 void UMyOnlineGameInstance::OnCreateSessionComplete_Implementation( FName sessionName, bool success )
 {
-	if( !success )
-	{
-		UE_LOG( LogTemp, Warning, TEXT( "Could not create session." ) );
-		return;
-	}
-
 	UEngine* Engine = GetEngine();
 	if( !ensure( Engine != nullptr ) )
 	{
 		return;
 	}
+
+	if( !success )
+	{
+		UE_LOG( LogTemp, Warning, TEXT( "Could not create session." ) );
+		Engine->AddOnScreenDebugMessage( 0, 2, FColor::Green, TEXT( "Could not create session." ) );
+
+		return;
+	}
+
+
 	Engine->AddOnScreenDebugMessage( 0, 2, FColor::Green, TEXT( "Hosting" ) );
 	UWorld* World = GetWorld();
 	if( !ensure( World != nullptr ) )
@@ -325,14 +329,9 @@ void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 	if( m_pSessionInterface.IsValid() )
 	{
 		FOnlineSessionSettings sessionSettings;
-		if( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" || serverData.isLAN )
-		{
-			sessionSettings.bIsLANMatch = true;
-		}
-		else
-		{
-			sessionSettings.bIsLANMatch = false;
-		}
+
+		sessionSettings.bIsLANMatch = false;
+
 		// Set number of max players
 		sessionSettings.NumPublicConnections = serverData.maxPlayers;
 
@@ -356,7 +355,12 @@ void UMyOnlineGameInstance::CreateSession( const FServerData& serverData )
 		sessionSettings.Set( GAMEMODE_SESSION_KEY, sessionGameMode, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing );
 
 		sessionSettings.Set( SERVER_NAME_KEY, serverData.name, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing );
-
+		UEngine* Engine = GetEngine();
+		if ( !ensure( Engine != nullptr ) )
+		{
+			return;
+		}
+		Engine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Green, TEXT( "CREATESESSION" ) );
 		m_pSessionInterface->CreateSession( 0, SESSION_NAME, sessionSettings );
 	}
 }

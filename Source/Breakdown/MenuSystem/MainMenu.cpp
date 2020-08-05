@@ -9,6 +9,7 @@
 #include "Components/EditableTextBox.h"
 #include "Components/TextBlock.h"
 #include "Components/WidgetSwitcher.h"
+#include "Engine/Engine.h"
 #include "Misc/DefaultValueHelper.h"
 #include "ServerRow.h"
 #include "UObject/ConstructorHelpers.h"
@@ -98,7 +99,6 @@ void UMainMenu::HostServer()
 {
 	if ( m_pMenuInterface != nullptr )
 	{
-		
 		FServerData serverData;
 		
 		// Set Max Players
@@ -139,12 +139,14 @@ void UMainMenu::HostServer()
 	else 
 	{
 		UE_LOG( LogTemp, Warning, TEXT( "MENU INTERFACE POINTER IS NULLPTR" ) );
+		if( GEngine )
+		GEngine->AddOnScreenDebugMessage( -1, 5.0f, FColor::Red, TEXT( "MENU INTERFACE POINTER IS NULLPTR" ) );
+
 	}
 }
 
 void UMainMenu::CreateServerList(TArray<FServerData> serverDatas )
 {
-
 	ServerList->ClearChildren();
 	uint32 serverRowIndex = 0;
 	for ( const FServerData& serverData : serverDatas )
