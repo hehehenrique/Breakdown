@@ -45,6 +45,11 @@ protected:
 	virtual bool Initialize() override;
 	virtual void OnLevelRemovedFromWorld( ULevel* InLevel, UWorld* InWorld ) override;
 
+	UFUNCTION( BlueprintImplementableEvent )
+	void OnServerListCreated();
+
+
+
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 	UEditableTextBox* ServerNameText;
 
@@ -58,23 +63,34 @@ protected:
 	UButton* ConnectToIPButton;
 
 
+
+
 	UPROPERTY( BlueprintReadWrite, EditAnywhere )
 	TSubclassOf< UUserWidget > ServerRowClass;
 
 
+	UFUNCTION( BlueprintCallable )
+		void HostServer();
+
+	UFUNCTION( BlueprintCallable, BlueprintNativeEvent )
+		void OpenJoinMenu();
+
+	UFUNCTION( BlueprintCallable, BlueprintNativeEvent )
+		void OpenOnlineMenu();
+
+	UFUNCTION( BlueprintCallable )
+		void OpenHostMenu();
+	
+	
+	
 	UFUNCTION( BlueprintCallable, BlueprintNativeEvent )
 	void JoinServer();
 
 
+
 	private:
 
-	UPROPERTY(meta = (BindWidget))
-	UButton* HostButton;
-
-	UPROPERTY(meta = (BindWidget))
-	UButton* JoinButton;
-
-
+	bool canConnect = false;
 
 	UPROPERTY(meta = (BindWidget))
 	UButton* CreateSessionButton;
@@ -111,18 +127,6 @@ protected:
 	UPROPERTY(meta = (BindWdiget))
 	UOverlay* FindingServersOverlay;
 		
-	UFUNCTION(BlueprintCallable)
-	void HostServer();
-
-	UFUNCTION(BlueprintCallable)
-	void OpenJoinMenu();
-
-	UFUNCTION(BlueprintCallable)
-	void OpenOnlineMenu();
-
-	UFUNCTION(BlueprintCallable)
-	void OpenHostMenu();
-
 	TOptional<uint32> m_selectedIndex;
 	IMenuInterface* m_pMenuInterface;
 };

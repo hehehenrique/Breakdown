@@ -75,15 +75,10 @@ bool UMainMenu::Initialize()
 	if ( Super::Initialize() ) 
 	{
 		
-		if ( !ensure( HostButton != nullptr ) ) return false;
-		if ( !ensure( JoinButton != nullptr ) ) return false;
 		if ( !ensure( BackToMainMenuButton != nullptr ) ) return false;
 		if ( !ensure( ConnectToIPButton != nullptr ) ) return false;
 		if ( !ensure( CreateSessionButton != nullptr ) ) return false;
 		
-		// Main Online Menu
-		HostButton->OnClicked.AddDynamic(this, &UMainMenu::OpenHostMenu);
-		JoinButton->OnClicked.AddDynamic( this, &UMainMenu::OpenJoinMenu );
 		// Join Servers Menu
 		ConnectToIPButton->OnClicked.AddDynamic( this, &UMainMenu::JoinServer );
 		BackToMainMenuButton->OnClicked.AddDynamic( this, &UMainMenu::OpenOnlineMenu );
@@ -165,13 +160,17 @@ void UMainMenu::CreateServerList(TArray<FServerData> serverDatas )
 	{
 		// Automatically select first server
 		SelectIndex( 0 );
+		canConnect = true;
 	}
 	// If no servers are found
 	else
 	{
 		// Disable connect button
 		ConnectToIPButton->SetIsEnabled( false );
+		canConnect = false;
 	}
+
+	OnServerListCreated();
 }
 
 void UMainMenu::SelectIndex( uint32 index, UServerRow* newHighlighted )
@@ -211,18 +210,21 @@ void UMainMenu::SelectIndex( uint32 index )
 
 void UMainMenu::JoinServer_Implementation() 
 {
-	if ( m_selectedIndex.IsSet() && m_pMenuInterface != nullptr )
+	if( canConnect )
 	{
-		UE_LOG( LogTemp, Warning, TEXT( "Selected index %d" ), m_selectedIndex.GetValue() );
-		m_pMenuInterface->Join( m_selectedIndex.GetValue() );
-	}
-	else
-	{
-		UE_LOG( LogTemp, Warning, TEXT( "Selected index %d" ), m_selectedIndex.GetValue() );
+		if( m_selectedIndex.IsSet() && m_pMenuInterface != nullptr )
+		{
+			UE_LOG( LogTemp, Warning, TEXT( "Selected index %d" ), m_selectedIndex.GetValue() );
+			m_pMenuInterface->Join( m_selectedIndex.GetValue() );
+		}
+		else
+		{
+			UE_LOG( LogTemp, Warning, TEXT( "Selected index %d" ), m_selectedIndex.GetValue() );
+		}
 	}
 }
 
-void UMainMenu::OpenJoinMenu() 
+void UMainMenu::OpenJoinMenu_Implementation()
 {
 	if ( !ensure( MenuSwitcher != nullptr ) ) return;
 	if ( !ensure( JoinMenu != nullptr ) ) return;
@@ -234,7 +236,7 @@ void UMainMenu::OpenJoinMenu()
 	}
 }
 
-void UMainMenu::OpenOnlineMenu() 
+void UMainMenu::OpenOnlineMenu_Implementation()
 {
 	if ( !ensure( MenuSwitcher != nullptr ) ) return;
 	if ( !ensure( OnlineMenu != nullptr ) ) return;

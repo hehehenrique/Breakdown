@@ -89,4 +89,8 @@ protected:
 	// Begins / Stops advertising server, runs when leaving / entering lobby maps
 	UFUNCTION( BlueprintCallable, Category = "Online | Update Session" )
 	void UpdateServerVisibility( bool visible );
+
+	// Shows loading screen
+	UFUNCTION( BlueprintCallable, BlueprintImplementableEvent )
+	void ShowLoadingScreen();
 };

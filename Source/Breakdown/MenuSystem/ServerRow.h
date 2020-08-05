@@ -21,6 +21,7 @@ public:
 
 	void Setup(const FServerData serverData, UMainMenu* pParent, uint32 index);
 	// Toggle background image if selected
+	UFUNCTION( BlueprintCallable )
 	void ToggleHighlight( bool highlighted );
 
 protected:
@@ -46,11 +47,15 @@ protected:
 	UPROPERTY( meta = ( BindWidget ) )
 	UTextBlock* CurrentConnections;
 	
-	UPROPERTY()
+	UPROPERTY( BlueprintReadOnly )
 	UMainMenu* m_pParent;
 	
-	uint32 m_index;
+	UPROPERTY( BlueprintReadOnly )
+	int m_index;
 	
 	UFUNCTION()
 	void OnClicked();
+
+	UFUNCTION( BlueprintCallable )
+	void SelectIndex();
 };

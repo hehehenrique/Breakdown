@@ -274,6 +274,10 @@ void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSes
 		Engine->AddOnScreenDebugMessage( 0, 5, FColor::Green, FString::Printf( TEXT( "OnJoinSessionComplete called. Joining address %s" ), *address ) );
 
 		UE_LOG( LogTemp, Warning, TEXT( "OnJoinSessionComplete called. ClientTravel will be called in next line. Joining address %s" ), *address );
+		
+		// Show loading screen
+		ShowLoadingScreen();
+
 
 		// Perform the ClientTravel to the server address in order to join it
 		PlayerController->ClientTravel( ( address ), ETravelType::TRAVEL_Absolute );

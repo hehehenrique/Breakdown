@@ -45,6 +45,11 @@ void UServerRow::Setup(const FServerData serverData, UMainMenu* pParent, uint32 
 
 void UServerRow::OnClicked()
 {
+	SelectIndex();
+}
+
+void UServerRow::SelectIndex()
+{
 	m_pParent->SelectIndex( m_index, this );
 }
 
