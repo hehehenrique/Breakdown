@@ -296,7 +296,7 @@ void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSes
 
 void UMyOnlineGameInstance::UpdateCurrentPlayers( int currentPlayers )
 {
-	if( m_pSessionInterface.IsValid() )
+	if( m_pSessionInterface.IsValid() && IsRunningSteam() )
 	{
 		FOnlineSessionSettings sessionSettings = *m_pSessionInterface->GetSessionSettings( SESSION_NAME );
 		sessionSettings.Set( CURRENT_PLAYERS_KEY, currentPlayers, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing );
