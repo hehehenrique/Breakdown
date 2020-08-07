@@ -304,13 +304,21 @@ void UMyOnlineGameInstance::OnJoinSessionComplete( FName sessionName, EOnJoinSes
 
 void UMyOnlineGameInstance::UpdateCurrentPlayers( int currentPlayers )
 {
-	if( m_pSessionInterface.IsValid() && IsRunningSteam() )
+	if( currentPlayers && m_pSessionInterface != nullptr )
 	{
-		FOnlineSessionSettings sessionSettings = *m_pSessionInterface->GetSessionSettings( SESSION_NAME );
-		sessionSettings.Set( CURRENT_PLAYERS_KEY, currentPlayers, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing );
-		m_pSessionInterface->UpdateSession( SESSION_NAME, sessionSettings );
+		if( m_pSessionInterface.IsValid() && IsRunningSteam() )
+		{
+			FNamedOnlineSession* thisSession = m_pSessionInterface->GetNamedSession( SESSION_NAME );
 
-		UpdateServerVisibility( sessionSettings.NumPublicConnections > currentPlayers );
+			if( thisSession != nullptr )
+			{
+				FOnlineSessionSettings sessionSettings = *m_pSessionInterface->GetSessionSettings( SESSION_NAME );
+				sessionSettings.Set( CURRENT_PLAYERS_KEY, currentPlayers, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing );
+				m_pSessionInterface->UpdateSession( SESSION_NAME, sessionSettings );
+
+				UpdateServerVisibility( sessionSettings.NumPublicConnections > currentPlayers );
+			}
+		}
 	}
 }
 
