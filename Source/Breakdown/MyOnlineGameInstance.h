@@ -40,7 +40,7 @@ public:
 	UFUNCTION( BlueprintCallable )
 	virtual void RefreshServerList() override;
 
-	UFUNCTION( BlueprintCallable )
+	UFUNCTION( BlueprintCallable, Category = "Online" )
 	void DestroySession();
 
 private:
@@ -73,6 +73,10 @@ protected:
 	UFUNCTION( BlueprintCallable, BlueprintNativeEvent, Category = "Online" )
 	void OnDestroySessionComplete( FName sessionName, bool success );
 
+	UFUNCTION( BlueprintImplementableEvent, Category = "Online" )
+	void OnDestroySessionRequested();
+
+
 	UFUNCTION( BlueprintCallable, BlueprintNativeEvent, Category = "Online" )
 	void OnFindSessionsComplete( bool success );
 
@@ -93,4 +97,7 @@ protected:
 	// Shows loading screen
 	UFUNCTION( BlueprintCallable, BlueprintImplementableEvent )
 	void ShowLoadingScreen();
+
+	UFUNCTION( BlueprintImplementableEvent, BlueprintCallable, Category = "Online | Connection Lost" )
+	void ReturnToMainMenu() override;
 };

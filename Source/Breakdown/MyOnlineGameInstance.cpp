@@ -144,7 +144,10 @@ void UMyOnlineGameInstance::RefreshServerList()
 void UMyOnlineGameInstance::DestroySession()
 {
 	if( m_pSessionInterface != nullptr )
+	{
+		OnDestroySessionRequested();
 		m_pSessionInterface->DestroySession( SESSION_NAME );
+	}
 }
 
 void UMyOnlineGameInstance::OnFindSessionsComplete_Implementation( bool success )
