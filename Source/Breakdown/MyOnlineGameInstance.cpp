@@ -90,8 +90,8 @@ void UMyOnlineGameInstance::OnCreateSessionComplete_Implementation( FName sessio
 
 	if( !success )
 	{
-		UE_LOG( LogTemp, Warning, TEXT( "Could not create session." ) );
-		Engine->AddOnScreenDebugMessage( 0, 2, FColor::Green, TEXT( "Could not create session." ) );
+		UE_LOG( LogTemp, Warning, TEXT( "Could not create session. If in editor, try launching the game as Standalone." ) );
+		Engine->AddOnScreenDebugMessage( 0, 2, FColor::Green, TEXT( "Could not create session.If in editor, try launching the game as Standalone." ) );
 
 		return;
 	}
