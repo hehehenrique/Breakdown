@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "Blueprint/UserWidget.h"
@@ -45,10 +43,14 @@ protected:
 	virtual bool Initialize() override;
 	virtual void OnLevelRemovedFromWorld( ULevel* InLevel, UWorld* InWorld ) override;
 
+	UPROPERTY( BlueprintReadWrite )
+	bool isTDM = false;
+
+	UPROPERTY( BlueprintReadWrite )
+	int maxPlayers = 8;
+
 	UFUNCTION( BlueprintImplementableEvent )
 	void OnServerListCreated();
-
-
 
 	UPROPERTY(meta = (BindWidget), BlueprintReadWrite)
 	UEditableTextBox* ServerNameText;
@@ -109,15 +111,7 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UPanelWidget* ServerList;
-
-	UPROPERTY(meta = (BindWidget))
-	UEditableTextBox* MaxPlayersText;
-
-
-
-	UPROPERTY(meta = (BindWidget))
-	UComboBoxString* GameModeComboString;
-		
+			
 	UPROPERTY(meta = (BindWidget))
 	UComboBoxString* OnlineModeComboString;
 

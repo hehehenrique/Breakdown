@@ -97,8 +97,7 @@ void UMainMenu::HostServer()
 		FServerData serverData;
 		
 		// Set Max Players
-		FDefaultValueHelper::ParseInt(MaxPlayersText->Text.ToString(), serverData.maxPlayers);
-		UE_LOG(LogTemp, Warning, TEXT("THE NUMBER OF MAX PLAYERS IS %d"), serverData.maxPlayers);
+		serverData.maxPlayers = maxPlayers;
 
 		// Set Current Players
 		serverData.currentPlayers = 1;
@@ -107,23 +106,13 @@ void UMainMenu::HostServer()
 		serverData.name = ServerNameText->Text.ToString();
 		
 		// Set Server GameMode
-		switch (GameModeComboString->GetSelectedIndex())
-		{
-		case 0:
+		if ( isTDM ) 
 		{
 			serverData.gameMode = EBreakdownGameMode::TeamDeathMatch;
 		}
-		break;
-		case 1:
+		else 
 		{
 			serverData.gameMode = EBreakdownGameMode::FreeForAll;
-		}
-		break;
-		default:
-		{
-			serverData.gameMode = EBreakdownGameMode::TeamDeathMatch;
-		}
-		break;
 		}
 
 		// Set Server Online Mode ( Steam / LAN )
